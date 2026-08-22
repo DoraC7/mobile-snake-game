@@ -1,7 +1,7 @@
 # 手機貪食蛇專案規格書（草案 v0.1）
 
 > 目標：一款「小而美」的手機貪食蛇網頁遊戲，具備震動回饋，
-> 並達到接近 Google 官方網頁小遊戲（如搜尋列 `play snake`）等級的操作流暢度。
+> 並達到接近主流極簡風格網頁小遊戲等級的操作流暢度。
 
 ---
 
@@ -37,8 +37,8 @@
 | PWA | 手寫 Service Worker（`sw.js`）+ `manifest.json` | 完全掌控快取策略，離線後仍可玩 |
 | 震動 | `navigator.vibrate()` (Vibration API) | 標準 Web API，無需額外套件；iOS Safari 不支援時需優雅降級 |
 | 測試 | Node.js 原生 assert 撰寫的 smoke test（核心邏輯） | 沿用「無框架」哲學，不引入 Jest 等重量測試框架 |
-| 音效 | Web Audio API 即時合成（Oscillator/GainNode），無音檔 | 零素材、檔案體積小、可依遊戲狀態動態調整，與 bug-snake 驗證過的做法一致 |
-| 多語系 | 手寫 JSON i18n（`i18n/{locale}.json` + `i18n.js`），22 種語系 | 與目前 fork 的 bug-snake 專案語系範圍一致（見 §3.4），沿用相同 key 結構降低維護成本 |
+| 音效 | Web Audio API 即時合成（Oscillator/GainNode），無音檔 | 零素材、檔案體積小、可依遊戲狀態動態調整，屬於已驗證過的做法 |
+| 多語系 | 手寫 JSON i18n（`i18n/{locale}.json` + `i18n.js`），22 種語系 | 沿用先前累積的語系範圍與 key 結構經驗（見 §3.4），降低維護成本 |
 
 > 💡 **為什麼不用 React/Vue + Vite？**
 > 這類框架解決的是「資料驅動 DOM 更新」的問題，但這裡幾乎所有畫面都在 Canvas 裡逐幀重繪，
@@ -67,10 +67,10 @@
 - 單一食物道具（進階道具留待 v2 規劃）。
 - 4 向格狀移動 + 邊界穿牆（wrap-around），無障礙物地圖（v1 先省略迷宮，降低複雜度）。
 
-### 3.2 美術與音效風格：Google 極簡路線
+### 3.2 美術與音效風格：極簡路線
 
-延續 §2.1 的決策，本專案**刻意不走 bug-snake 的「多皮膚/花俏特效」路線**，
-而是模仿 Google 搜尋「play snake」內建遊戲的極簡美術語言：
+延續 §2.1 的決策，本專案**刻意不走「多皮膚/花俏特效」路線**，
+而是採用主流搜尋引擎內建小遊戲式的極簡美術語言：
 
 | 面向 | 規格 |
 |---|---|
@@ -81,7 +81,7 @@
 | UI 文字 | 使用系統預設無襯線字型（`system-ui`），不額外載入 Web Font，減少首屏等待時間 |
 | 音效 | 極簡短音效：吃食物、死亡各一種（各 < 200ms），Web Audio 即時合成，不做動態配樂 |
 
-> 💡 **設計理由**：Google 版好玩的核心在於「上手零門檻、視覺零干擾、專注操作反饋」，
+> 💡 **設計理由**：這類極簡小遊戲好玩的核心在於「上手零門檻、視覺零干擾、專注操作反饋」，
 > 不是靠豐富美術取勝。本專案的「精緻感」應該來自**流暢度與反應速度**，而非視覺複雜度。
 
 ### 3.3 震動事件對照表
@@ -97,7 +97,7 @@
 
 ### 3.4 多語系範圍
 
-沿用目前 fork 的 `bug-snake` 專案的 22 語系範圍，維持一致的在地化涵蓋率：
+沿用先前累積的 22 語系範圍規劃，維持一致的在地化涵蓋率：
 
 ```text
 zh-TW  en-US  ar-SA  bn-BD  de-DE  es-ES  fa-IR  fr-FR
@@ -105,9 +105,9 @@ hi-IN  id-ID  it-IT  ja-JP  ko-KR  nl-NL  pl-PL  pt-BR
 ru-RU  th-TH  tr-TR  ur-PK  vi-VN  zh-CN
 ```
 
-- 以 `en-US.json` 作為 key 結構的參考基準（比照 bug-snake 的 `check-i18n.js` 驗證邏輯）。
+- 以 `en-US.json` 作為 key 結構的參考基準（沿用既有的 `check-i18n.js` 驗證邏輯）。
 - `ar-SA` / `fa-IR` / `ur-PK` 為 RTL（right-to-left）語言，需確保 `<html dir="rtl">` 自動切換與版面鏡像正確。
-- 因美術走 Google 極簡風格、文字量少（僅分數、開始/重玩、震動開關等少量字串），語系檔案內容會比 bug-snake 精簡許多，維護成本較低。
+- 因美術走極簡風格、文字量少（僅分數、開始/重玩、震動開關等少量字串），語系檔案內容會精簡許多，維護成本較低。
 
 ### 3.5 統計數據建議（有趣且低成本實作）
 
@@ -116,7 +116,7 @@ ru-RU  th-TH  tr-TR  ur-PK  vi-VN  zh-CN
 
 | 統計項目 | 說明 | 有趣點 |
 |---|---|---|
-| 🏆 最高分 / 最高長度 | 基本款，bug-snake 已有 | 必備基準線 |
+| 🏆 最高分 / 最高長度 | 基本款，貪食蛇必備統計 | 必備基準線 |
 | 🔥 目前連勝場次 / 歷史最佳連勝 | 連續破紀錄視為一次連勝 | 製造「再玩一場就能延續紀錄」的動機 |
 | ⏱️ 本場存活時間 vs. 歷史平均 | 死亡後顯示「比平均快/慢 X 秒」 | 即時、可比較的回饋，比單純分數更有感 |
 | 🍎 終身累積吃過的食物數 | 跨場次累加 | 營造長期陪伴感，輕量成就系統 |
@@ -132,7 +132,7 @@ ru-RU  th-TH  tr-TR  ur-PK  vi-VN  zh-CN
 
 ## 4. 架構設計
 
-### 4.1 模組劃分（延續 bug-snake 驗證過的分層模式）
+### 4.1 模組劃分（延續先前驗證過的分層模式）
 
 ```text
 src/
@@ -145,7 +145,7 @@ src/
     game.js             // Facade，協調以上模組
     config.js           // 常數設定
   render/
-    renderer.js         // Canvas 2D 繪圖（Google 極簡風格）
+    renderer.js         // Canvas 2D 繪圖（極簡風格）
   audio/
     audio-engine.js     // Web Audio 即時合成音效（吃食物/死亡）
   input/
@@ -157,7 +157,7 @@ src/
     stats-manager.js     // 統計數據存取（見 §3.5）
   main.js                // 入口，DOM 綁定
 i18n/
-  en-US.json ... (22 語系檔，結構同 bug-snake，見 §3.4)
+  en-US.json ... (22 語系檔，結構規劃見 §3.4)
   index.json             // 語系清單
 sw.js                     // Service Worker
 manifest.json             // PWA 設定
@@ -181,7 +181,7 @@ styles/main.css
   render(alpha)        // 用 alpha 在「前一格」與「目前格」間插值，畫面平滑移動
 ```
 
-> 這是让蛇「格狀移動」看起來絲滑而非一格格跳動的關鍵技巧，也是 Google 級網頁遊戲常見手法。
+> 這是让蛇「格狀移動」看起來絲滑而非一格格跳動的關鍵技巧，也是主流網頁遊戲常見手法。
 
 ### 4.3 HapticManager 設計（新模組，單一職責）
 
@@ -203,11 +203,11 @@ class HapticManager {
 
 - 使用 `touchstart`/`touchmove`/`touchend`，並在事件監聽時加上 `{ passive: true }`（除非需要 `preventDefault`），避免捲動事件與遊戲手勢衝突造成的輸入延遲。
 - 滑動手勢判斷採用「最小滑動距離門檻」（例：30px），避免手震誤觸發轉向。
-- 方向輸入採用「佇列 + 反向過濾」機制（bug-snake 已驗證的模式）：最多緩衝 2 個方向指令，且過濾掉「立即反向」的非法輸入，避免蛇瞬間自撞。
+- 方向輸入採用「佇列 + 反向過濾」機制（已驗證過的模式）：最多緩衝 2 個方向指令，且過濾掉「立即反向」的非法輸入，避免蛇瞬間自撞。
 
 ### 4.5 AudioEngine 設計（極簡版）
 
-比照 bug-snake 的 Web Audio 即時合成做法，但範圍大幅縮小：
+沿用先前驗證過的 Web Audio 即時合成做法，但範圍大幅縮小：
 
 ```text
 class AudioEngine {
@@ -218,7 +218,7 @@ class AudioEngine {
 }
 ```
 
-- 不做動態配樂、不做音高隨長度變化（那是 bug-snake 的「juice」，本專案刻意捨棄以維持極簡）。
+- 不做動態配樂、不做音高隨長度變化（那類屬於加分「juice」效果，本專案刻意捨棄以維持極簡）。
 - 靜音開關與 §4.3 的震動開關應在同一個設定區塊呈現，UI 越少越好。
 
 ### 4.6 StatsManager 設計
@@ -229,7 +229,7 @@ class AudioEngine {
 class StatsManager {
   recordGameEnd({ score, length, survivalSeconds, deathReason })
   getSummary()             // 回傳最高分/連勝/終身食物數/平均存活時間等彙總資料
-  _load() / _save()         // localStorage 持久化，key 命名沿用 bug-snake 慣例（bugbuster_ 前綴風格）
+  _load() / _save()         // localStorage 持久化，key 命名採用專案專屬前綴風格
 }
 ```
 
@@ -241,7 +241,7 @@ class StatsManager {
 
 - `manifest.json`：定義 `display: standalone`、圖示、主題色，讓使用者可加到主畫面，全螢幕沉浸體驗（無瀏覽器網址列，減少視覺干擾）。
 - `sw.js`：預快取所有核心資源（HTML/JS/CSS/圖示），確保離線也能玩。
-- **重要不變量**：新增任何 `.js` 模組後，必須同步加入 `sw.js` 的快取清單，否則離線模式會壞掉（沿用 bug-snake 專案已驗證過的教訓）。
+- **重要不變量**：新增任何 `.js` 模組後，必須同步加入 `sw.js` 的快取清單，否則離線模式會壞掉（延續先前專案已驗證過的教訓）。
 
 ---
 
@@ -266,7 +266,7 @@ class StatsManager {
 | 階段 | 內容 |
 |---|---|
 | M1 | 核心邏輯（Grid/Snake/GameLoop/StateMachine）+ 純鍵盤操作可玩版本 |
-| M2 | Canvas 渲染（Google 極簡風格 + Jade Cream 品牌色）+ 插值動畫，達成視覺流暢度目標 |
+| M2 | Canvas 渲染（極簡風格 + Jade Cream 品牌色）+ 插值動畫，達成視覺流暢度目標 |
 | M3 | 觸控輸入（滑動 + D-pad）+ 行動裝置版面 |
 | M4 | HapticManager 震動回饋 + AudioEngine 音效整合 |
 | M5 | PWA（manifest + service worker）+ 離線測試 |
@@ -280,8 +280,8 @@ class StatsManager {
 
 ### 8.1 操作方式：維持純手動操作
 
-- **不實作 AI 自動駕駛模式**（bug-snake 的 `ai-pilot.js` 概念不移植）。
-- 理由：AI 尋路（Greedy/BFS/A*）是 bug-snake 用來展示技術深度的「加分項」，
+- **不實作 AI 自動駕駛模式**（先前構想過的 `ai-pilot.js` 概念不移植）。
+- 理由：AI 尋路（Greedy/BFS/A*）原本是用來展示技術深度的「加分項」，
   但對本專案「小而美」的定位是不必要的複雜度，且會增加 `Grid`/`Snake` 之間
   額外的介面設計負擔（AI 需要查詢蛇身佔用、地圖可達性等）。
 - 唯一的輸入來源：鍵盤方向鍵/WASD（桌面）、滑動手勢 + D-pad（手機），
@@ -292,10 +292,10 @@ class StatsManager {
 - **主色（品牌識別色）**：Jade Cream，柔和的灰綠色調。
   - 建議 Hex 近似值：`#9CBBA0`（Pantone 對應 Hex 會依印刷/螢幕校色系統略有差異，
     正式上線前建議用 Pantone 官方 Connect 工具或設計師提供的螢幕安全色再次核對）。
-  - 因此本專案**改為採用 Jade Cream 取代原本規劃的「Google 藍」**作為蛇身/強調色，
+  - 因此本專案**改為採用 Jade Cream 取代原本規劃的「主色藍」**作為蛇身/強調色，
     §3.2 美術風格表格中的「蛇身用單一飽和色」欄位需更新（見下方調整）。
 - **背景色搭配建議**：維持深色背景（`#1b1b1b` 或更偏冷的 `#14181a`），
-  讓柔和的 Jade Cream 在深底上有足夠對比度，同時保留「Google 極簡」的克制感。
+  讓柔和的 Jade Cream 在深底上有足夠對比度，同時保留「極簡」的克制感。
 - **PWA icon / manifest.json `theme_color`**：使用 Jade Cream 作為 `theme_color`，
   背景色 `background_color` 採深色背景，維持一致的品牌識別。
 - **無障礙對比度檢查**：Jade Cream 屬於中低飽和度色彩，正式套用前需用
