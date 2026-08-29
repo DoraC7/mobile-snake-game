@@ -1,0 +1,21 @@
+{
+  "app.title": "Rắn Săn Mồi",
+  "title.start": "Chạm hoặc nhấn phím cách để bắt đầu",
+  "title.highScore": "Điểm cao nhất: {score}",
+  "hud.score": "Điểm",
+  "gameover.title": "Trò chơi kết thúc",
+  "gameover.score": "Điểm: {score}",
+  "gameover.newHighScore": "Kỷ lục mới!",
+  "gameover.restart": "Chạm hoặc nhấn phím cách để chơi lại",
+  "settings.title": "Cài đặt",
+  "settings.haptics": "Rung",
+  "settings.sound": "Âm thanh",
+  "settings.language": "Ngôn ngữ",
+  "stats.title": "Thống kê",
+  "stats.highScore": "Điểm cao nhất",
+  "stats.highLength": "Con rắn dài nhất",
+  "stats.totalFood": "Tổng số thức ăn đã ăn",
+  "stats.totalGames": "Số lần chơi",
+  "stats.currentStreak": "Chuỗi thắng hiện tại",
+  "stats.bestStreak": "Chuỗi thắng tốt nhất"
+}

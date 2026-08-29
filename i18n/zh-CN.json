@@ -1,0 +1,21 @@
+{
+  "app.title": "贪吃蛇",
+  "title.start": "点击或按空格键开始",
+  "title.highScore": "最高分：{score}",
+  "hud.score": "分数",
+  "gameover.title": "游戏结束",
+  "gameover.score": "分数：{score}",
+  "gameover.newHighScore": "打破纪录了！",
+  "gameover.restart": "点击或按空格键再玩一次",
+  "settings.title": "设置",
+  "settings.haptics": "震动",
+  "settings.sound": "音效",
+  "settings.language": "语言",
+  "stats.title": "统计数据",
+  "stats.highScore": "最高分",
+  "stats.highLength": "最长长度",
+  "stats.totalFood": "终身吃过的食物数",
+  "stats.totalGames": "总游玩场次",
+  "stats.currentStreak": "当前连胜",
+  "stats.bestStreak": "历史最佳连胜"
+}

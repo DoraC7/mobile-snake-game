@@ -1,0 +1,21 @@
+{
+  "app.title": "الثعبان",
+  "title.start": "اضغط أو انقر مفتاح المسافة للبدء",
+  "title.highScore": "أعلى نتيجة: {score}",
+  "hud.score": "النتيجة",
+  "gameover.title": "انتهت اللعبة",
+  "gameover.score": "النتيجة: {score}",
+  "gameover.newHighScore": "رقم قياسي جديد!",
+  "gameover.restart": "اضغط أو انقر مفتاح المسافة للعب مرة أخرى",
+  "settings.title": "الإعدادات",
+  "settings.haptics": "الاهتزاز",
+  "settings.sound": "الصوت",
+  "settings.language": "اللغة",
+  "stats.title": "الإحصائيات",
+  "stats.highScore": "أعلى نتيجة",
+  "stats.highLength": "أطول ثعبان",
+  "stats.totalFood": "إجمالي الطعام المأكول",
+  "stats.totalGames": "عدد الألعاب الملعوبة",
+  "stats.currentStreak": "السلسلة الحالية",
+  "stats.bestStreak": "أفضل سلسلة"
+}

@@ -1,0 +1,21 @@
+{
+  "app.title": "Serpiente",
+  "title.start": "Toca o pulsa espacio para empezar",
+  "title.highScore": "Puntuación máxima: {score}",
+  "hud.score": "Puntos",
+  "gameover.title": "Fin del juego",
+  "gameover.score": "Puntos: {score}",
+  "gameover.newHighScore": "¡Nuevo récord!",
+  "gameover.restart": "Toca o pulsa espacio para volver a jugar",
+  "settings.title": "Ajustes",
+  "settings.haptics": "Vibración",
+  "settings.sound": "Sonido",
+  "settings.language": "Idioma",
+  "stats.title": "Estadísticas",
+  "stats.highScore": "Puntuación máxima",
+  "stats.highLength": "Serpiente más larga",
+  "stats.totalFood": "Comida total comida",
+  "stats.totalGames": "Partidas jugadas",
+  "stats.currentStreak": "Racha actual",
+  "stats.bestStreak": "Mejor racha"
+}

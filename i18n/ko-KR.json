@@ -1,0 +1,21 @@
+{
+  "app.title": "스네이크",
+  "title.start": "탭하거나 스페이스바를 눌러 시작하세요",
+  "title.highScore": "최고 점수: {score}",
+  "hud.score": "점수",
+  "gameover.title": "게임 오버",
+  "gameover.score": "점수: {score}",
+  "gameover.newHighScore": "신기록!",
+  "gameover.restart": "탭하거나 스페이스바를 눌러 다시 시작하세요",
+  "settings.title": "설정",
+  "settings.haptics": "진동",
+  "settings.sound": "소리",
+  "settings.language": "언어",
+  "stats.title": "통계",
+  "stats.highScore": "최고 점수",
+  "stats.highLength": "최장 길이",
+  "stats.totalFood": "누적 섭취한 먹이 수",
+  "stats.totalGames": "총 플레이 횟수",
+  "stats.currentStreak": "현재 연승",
+  "stats.bestStreak": "최고 연승"
+}

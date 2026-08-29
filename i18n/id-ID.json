@@ -1,0 +1,21 @@
+{
+  "app.title": "Ular",
+  "title.start": "Ketuk atau tekan Spasi untuk mulai",
+  "title.highScore": "Skor tertinggi: {score}",
+  "hud.score": "Skor",
+  "gameover.title": "Permainan Berakhir",
+  "gameover.score": "Skor: {score}",
+  "gameover.newHighScore": "Rekor baru!",
+  "gameover.restart": "Ketuk atau tekan Spasi untuk main lagi",
+  "settings.title": "Pengaturan",
+  "settings.haptics": "Getaran",
+  "settings.sound": "Suara",
+  "settings.language": "Bahasa",
+  "stats.title": "Statistik",
+  "stats.highScore": "Skor tertinggi",
+  "stats.highLength": "Ular terpanjang",
+  "stats.totalFood": "Total makanan dimakan",
+  "stats.totalGames": "Total permainan",
+  "stats.currentStreak": "Rentetan saat ini",
+  "stats.bestStreak": "Rentetan terbaik"
+}

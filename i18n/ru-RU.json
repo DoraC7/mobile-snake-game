@@ -1,0 +1,21 @@
+{
+  "app.title": "Змейка",
+  "title.start": "Нажмите или коснитесь, чтобы начать",
+  "title.highScore": "Рекорд: {score}",
+  "hud.score": "Очки",
+  "gameover.title": "Игра окончена",
+  "gameover.score": "Очки: {score}",
+  "gameover.newHighScore": "Новый рекорд!",
+  "gameover.restart": "Нажмите или коснитесь, чтобы сыграть снова",
+  "settings.title": "Настройки",
+  "settings.haptics": "Вибрация",
+  "settings.sound": "Звук",
+  "settings.language": "Язык",
+  "stats.title": "Статистика",
+  "stats.highScore": "Рекорд",
+  "stats.highLength": "Самая длинная змейка",
+  "stats.totalFood": "Всего съедено еды",
+  "stats.totalGames": "Сыграно игр",
+  "stats.currentStreak": "Текущая серия",
+  "stats.bestStreak": "Лучшая серия"
+}

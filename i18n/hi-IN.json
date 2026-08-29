@@ -1,0 +1,21 @@
+{
+  "app.title": "साँप",
+  "title.start": "शुरू करने के लिए टैप करें या स्पेस दबाएँ",
+  "title.highScore": "उच्चतम स्कोर: {score}",
+  "hud.score": "स्कोर",
+  "gameover.title": "खेल समाप्त",
+  "gameover.score": "स्कोर: {score}",
+  "gameover.newHighScore": "नया रिकॉर्ड!",
+  "gameover.restart": "फिर से खेलने के लिए टैप करें या स्पेस दबाएँ",
+  "settings.title": "सेटिंग्स",
+  "settings.haptics": "कंपन",
+  "settings.sound": "ध्वनि",
+  "settings.language": "भाषा",
+  "stats.title": "आँकड़े",
+  "stats.highScore": "उच्चतम स्कोर",
+  "stats.highLength": "सबसे लंबा साँप",
+  "stats.totalFood": "कुल खाया गया भोजन",
+  "stats.totalGames": "कुल खेले गए गेम",
+  "stats.currentStreak": "मौजूदा लकीर",
+  "stats.bestStreak": "सर्वश्रेष्ठ लकीर"
+}

@@ -1,0 +1,21 @@
+{
+  "app.title": "مار",
+  "title.start": "برای شروع ضربه بزنید یا کلید فاصله را فشار دهید",
+  "title.highScore": "بالاترین امتیاز: {score}",
+  "hud.score": "امتیاز",
+  "gameover.title": "بازی تمام شد",
+  "gameover.score": "امتیاز: {score}",
+  "gameover.newHighScore": "رکورد جدید!",
+  "gameover.restart": "برای بازی دوباره ضربه بزنید یا کلید فاصله را فشار دهید",
+  "settings.title": "تنظیمات",
+  "settings.haptics": "لرزش",
+  "settings.sound": "صدا",
+  "settings.language": "زبان",
+  "stats.title": "آمار",
+  "stats.highScore": "بالاترین امتیاز",
+  "stats.highLength": "طولانی‌ترین مار",
+  "stats.totalFood": "کل غذای خورده شده",
+  "stats.totalGames": "تعداد بازی‌ها",
+  "stats.currentStreak": "روند فعلی",
+  "stats.bestStreak": "بهترین روند"
+}

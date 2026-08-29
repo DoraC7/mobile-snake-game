@@ -1,0 +1,21 @@
+{
+  "app.title": "งู",
+  "title.start": "แตะหรือกดสเปซบาร์เพื่อเริ่ม",
+  "title.highScore": "คะแนนสูงสุด: {score}",
+  "hud.score": "คะแนน",
+  "gameover.title": "จบเกม",
+  "gameover.score": "คะแนน: {score}",
+  "gameover.newHighScore": "สถิติใหม่!",
+  "gameover.restart": "แตะหรือกดสเปซบาร์เพื่อเล่นอีกครั้ง",
+  "settings.title": "การตั้งค่า",
+  "settings.haptics": "การสั่น",
+  "settings.sound": "เสียง",
+  "settings.language": "ภาษา",
+  "stats.title": "สถิติ",
+  "stats.highScore": "คะแนนสูงสุด",
+  "stats.highLength": "งูที่ยาวที่สุด",
+  "stats.totalFood": "อาหารที่กินทั้งหมด",
+  "stats.totalGames": "จำนวนเกมที่เล่น",
+  "stats.currentStreak": "สถิติต่อเนื่องปัจจุบัน",
+  "stats.bestStreak": "สถิติต่อเนื่องที่ดีที่สุด"
+}

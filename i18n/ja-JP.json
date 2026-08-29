@@ -1,0 +1,21 @@
+{
+  "app.title": "スネーク",
+  "title.start": "タップまたはスペースキーでスタート",
+  "title.highScore": "ハイスコア: {score}",
+  "hud.score": "スコア",
+  "gameover.title": "ゲームオーバー",
+  "gameover.score": "スコア: {score}",
+  "gameover.newHighScore": "新記録！",
+  "gameover.restart": "タップまたはスペースキーでもう一度プレイ",
+  "settings.title": "設定",
+  "settings.haptics": "バイブレーション",
+  "settings.sound": "サウンド",
+  "settings.language": "言語",
+  "stats.title": "統計",
+  "stats.highScore": "ハイスコア",
+  "stats.highLength": "最長の長さ",
+  "stats.totalFood": "累計獲得エサ数",
+  "stats.totalGames": "プレイ回数",
+  "stats.currentStreak": "現在の連勝",
+  "stats.bestStreak": "最高連勝"
+}

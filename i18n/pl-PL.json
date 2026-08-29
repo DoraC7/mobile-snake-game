@@ -1,0 +1,21 @@
+{
+  "app.title": "Wąż",
+  "title.start": "Dotknij lub naciśnij spację, aby zacząć",
+  "title.highScore": "Najwyższy wynik: {score}",
+  "hud.score": "Wynik",
+  "gameover.title": "Koniec gry",
+  "gameover.score": "Wynik: {score}",
+  "gameover.newHighScore": "Nowy rekord!",
+  "gameover.restart": "Dotknij lub naciśnij spację, aby zagrać ponownie",
+  "settings.title": "Ustawienia",
+  "settings.haptics": "Wibracje",
+  "settings.sound": "Dźwięk",
+  "settings.language": "Język",
+  "stats.title": "Statystyki",
+  "stats.highScore": "Najwyższy wynik",
+  "stats.highLength": "Najdłuższy wąż",
+  "stats.totalFood": "Łącznie zjedzone jedzenie",
+  "stats.totalGames": "Rozegrane gry",
+  "stats.currentStreak": "Obecna seria",
+  "stats.bestStreak": "Najlepsza seria"
+}

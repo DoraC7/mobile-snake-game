@@ -1,0 +1,21 @@
+{
+  "app.title": "Yılan",
+  "title.start": "Başlamak için dokunun veya boşluk tuşuna basın",
+  "title.highScore": "En yüksek skor: {score}",
+  "hud.score": "Skor",
+  "gameover.title": "Oyun Bitti",
+  "gameover.score": "Skor: {score}",
+  "gameover.newHighScore": "Yeni rekor!",
+  "gameover.restart": "Tekrar oynamak için dokunun veya boşluk tuşuna basın",
+  "settings.title": "Ayarlar",
+  "settings.haptics": "Titreşim",
+  "settings.sound": "Ses",
+  "settings.language": "Dil",
+  "stats.title": "İstatistikler",
+  "stats.highScore": "En yüksek skor",
+  "stats.highLength": "En uzun yılan",
+  "stats.totalFood": "Toplam yenen yiyecek",
+  "stats.totalGames": "Oynanan oyun sayısı",
+  "stats.currentStreak": "Mevcut seri",
+  "stats.bestStreak": "En iyi seri"
+}

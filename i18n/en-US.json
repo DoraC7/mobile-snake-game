@@ -1,0 +1,21 @@
+{
+  "app.title": "Snake",
+  "title.start": "Tap or press Space to Start",
+  "title.highScore": "High Score: {score}",
+  "hud.score": "Score",
+  "gameover.title": "Game Over",
+  "gameover.score": "Score: {score}",
+  "gameover.newHighScore": "New High Score!",
+  "gameover.restart": "Tap or press Space to Play Again",
+  "settings.title": "Settings",
+  "settings.haptics": "Vibration",
+  "settings.sound": "Sound",
+  "settings.language": "Language",
+  "stats.title": "Stats",
+  "stats.highScore": "High Score",
+  "stats.highLength": "Longest Snake",
+  "stats.totalFood": "Total Food Eaten",
+  "stats.totalGames": "Games Played",
+  "stats.currentStreak": "Current Streak",
+  "stats.bestStreak": "Best Streak"
+}

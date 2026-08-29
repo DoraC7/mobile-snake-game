@@ -1,0 +1,21 @@
+{
+  "app.title": "Slang",
+  "title.start": "Tik of druk op spatie om te beginnen",
+  "title.highScore": "Hoogste score: {score}",
+  "hud.score": "Score",
+  "gameover.title": "Game Over",
+  "gameover.score": "Score: {score}",
+  "gameover.newHighScore": "Nieuw record!",
+  "gameover.restart": "Tik of druk op spatie om opnieuw te spelen",
+  "settings.title": "Instellingen",
+  "settings.haptics": "Trilling",
+  "settings.sound": "Geluid",
+  "settings.language": "Taal",
+  "stats.title": "Statistieken",
+  "stats.highScore": "Hoogste score",
+  "stats.highLength": "Langste slang",
+  "stats.totalFood": "Totaal gegeten voedsel",
+  "stats.totalGames": "Aantal potjes",
+  "stats.currentStreak": "Huidige reeks",
+  "stats.bestStreak": "Beste reeks"
+}

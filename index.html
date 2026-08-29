@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#9CBBA0" />
+  <title>Snake</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="hud">
+      <span id="score-display">Score: 0</span>
+      <button id="settings-btn" aria-label="Settings">⚙️</button>
+    </header>
+
+    <main id="board-wrap">
+      <canvas id="game-canvas"></canvas>
+
+      <div id="overlay">
+        <h1 id="overlay-title"></h1>
+        <p id="overlay-subtitle"></p>
+        <p id="overlay-hint" hidden></p>
+        <ul id="stats-list" aria-label="Stats"></ul>
+      </div>
+    </main>
+
+    <nav id="dpad" aria-label="Direction pad">
+      <button class="dpad-btn" data-dir="UP" aria-label="Up">▲</button>
+      <div class="dpad-row">
+        <button class="dpad-btn" data-dir="LEFT" aria-label="Left">◀</button>
+        <button class="dpad-btn" data-dir="RIGHT" aria-label="Right">▶</button>
+      </div>
+      <button class="dpad-btn" data-dir="DOWN" aria-label="Down">▼</button>
+    </nav>
+
+    <div id="settings-panel" hidden>
+      <h2 data-i18n="settings.title"></h2>
+      <label>
+        <span data-i18n="settings.haptics"></span>
+        <input type="checkbox" id="haptic-toggle" />
+      </label>
+      <label>
+        <span data-i18n="settings.sound"></span>
+        <input type="checkbox" id="sound-toggle" />
+      </label>
+      <label>
+        <span data-i18n="settings.language"></span>
+        <select id="lang-select"></select>
+      </label>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

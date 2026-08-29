@@ -1,0 +1,21 @@
+{
+  "app.title": "Cobrinha",
+  "title.start": "Toque ou pressione espaço para começar",
+  "title.highScore": "Pontuação máxima: {score}",
+  "hud.score": "Pontos",
+  "gameover.title": "Fim de Jogo",
+  "gameover.score": "Pontos: {score}",
+  "gameover.newHighScore": "Novo recorde!",
+  "gameover.restart": "Toque ou pressione espaço para jogar novamente",
+  "settings.title": "Configurações",
+  "settings.haptics": "Vibração",
+  "settings.sound": "Som",
+  "settings.language": "Idioma",
+  "stats.title": "Estatísticas",
+  "stats.highScore": "Pontuação máxima",
+  "stats.highLength": "Cobra mais longa",
+  "stats.totalFood": "Total de comida consumida",
+  "stats.totalGames": "Partidas jogadas",
+  "stats.currentStreak": "Sequência atual",
+  "stats.bestStreak": "Melhor sequência"
+}

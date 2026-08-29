@@ -1,0 +1,21 @@
+{
+  "app.title": "سانپ",
+  "title.start": "شروع کرنے کے لیے ٹیپ کریں یا اسپیس بار دبائیں",
+  "title.highScore": "بہترین اسکور: {score}",
+  "hud.score": "اسکور",
+  "gameover.title": "گیم ختم",
+  "gameover.score": "اسکور: {score}",
+  "gameover.newHighScore": "نیا ریکارڈ!",
+  "gameover.restart": "دوبارہ کھیلنے کے لیے ٹیپ کریں یا اسپیس بار دبائیں",
+  "settings.title": "ترتیبات",
+  "settings.haptics": "وائبریشن",
+  "settings.sound": "آواز",
+  "settings.language": "زبان",
+  "stats.title": "اعداد و شمار",
+  "stats.highScore": "بہترین اسکور",
+  "stats.highLength": "سب سے لمبا سانپ",
+  "stats.totalFood": "کل کھایا گیا کھانا",
+  "stats.totalGames": "کھیلے گئے گیمز",
+  "stats.currentStreak": "موجودہ سلسلہ",
+  "stats.bestStreak": "بہترین سلسلہ"
+}

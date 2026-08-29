@@ -1,0 +1,21 @@
+{
+  "app.title": "Schlange",
+  "title.start": "Tippen oder Leertaste drücken zum Starten",
+  "title.highScore": "Highscore: {score}",
+  "hud.score": "Punkte",
+  "gameover.title": "Spiel vorbei",
+  "gameover.score": "Punkte: {score}",
+  "gameover.newHighScore": "Neuer Highscore!",
+  "gameover.restart": "Tippen oder Leertaste drücken, um erneut zu spielen",
+  "settings.title": "Einstellungen",
+  "settings.haptics": "Vibration",
+  "settings.sound": "Ton",
+  "settings.language": "Sprache",
+  "stats.title": "Statistiken",
+  "stats.highScore": "Highscore",
+  "stats.highLength": "Längste Schlange",
+  "stats.totalFood": "Insgesamt gefressen",
+  "stats.totalGames": "Gespielte Runden",
+  "stats.currentStreak": "Aktuelle Serie",
+  "stats.bestStreak": "Beste Serie"
+}

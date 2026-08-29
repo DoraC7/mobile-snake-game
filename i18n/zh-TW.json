@@ -1,0 +1,21 @@
+{
+  "app.title": "貪食蛇",
+  "title.start": "點擊或按空白鍵開始",
+  "title.highScore": "最高分：{score}",
+  "hud.score": "分數",
+  "gameover.title": "遊戲結束",
+  "gameover.score": "分數：{score}",
+  "gameover.newHighScore": "破紀錄了！",
+  "gameover.restart": "點擊或按空白鍵再玩一次",
+  "settings.title": "設定",
+  "settings.haptics": "震動",
+  "settings.sound": "音效",
+  "settings.language": "語言",
+  "stats.title": "統計數據",
+  "stats.highScore": "最高分",
+  "stats.highLength": "最長長度",
+  "stats.totalFood": "終身吃過的食物數",
+  "stats.totalGames": "總遊玩場次",
+  "stats.currentStreak": "目前連勝",
+  "stats.bestStreak": "歷史最佳連勝"
+}

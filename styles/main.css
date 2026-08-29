@@ -1,0 +1,182 @@
+:root {
+  --color-bg: #14181a;
+  --color-snake: #9cbba0;
+  --color-snake-head: #b7d0ba;
+  --color-food: #e8c468;
+  --color-text: #eef1ee;
+  --color-panel: #1b1f21;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#app {
+  width: 100%;
+  max-width: 480px;
+  height: 100%;
+  max-height: 900px;
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top, 12px) 12px env(safe-area-inset-bottom, 12px);
+  gap: 12px;
+}
+
+#hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+#settings-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+#board-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+#game-canvas {
+  background: var(--color-bg);
+  border-radius: 12px;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1 / 1;
+  touch-action: none;
+}
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 24, 26, 0.88);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#overlay[hidden] {
+  display: none;
+}
+
+#overlay-title {
+  font-size: 1.6rem;
+  margin: 0;
+  color: var(--color-snake-head);
+}
+
+#overlay-subtitle,
+#overlay-hint {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+#stats-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  display: grid;
+  gap: 2px;
+}
+
+#dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 48px;
+}
+
+.dpad-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: none;
+  background: var(--color-panel);
+  color: var(--color-snake);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.dpad-btn:active {
+  background: var(--color-snake);
+  color: var(--color-bg);
+}
+
+#settings-panel {
+  position: fixed;
+  inset: auto 12px 12px 12px;
+  max-width: 456px;
+  margin: 0 auto;
+  background: var(--color-panel);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#settings-panel[hidden] {
+  display: none;
+}
+
+#settings-panel label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+#settings-panel h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+@media (min-width: 640px) {
+  #app {
+    max-width: 520px;
+  }
+}

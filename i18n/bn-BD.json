@@ -1,0 +1,21 @@
+{
+  "app.title": "সাপ",
+  "title.start": "শুরু করতে ট্যাপ করুন বা স্পেস চাপুন",
+  "title.highScore": "সর্বোচ্চ স্কোর: {score}",
+  "hud.score": "স্কোর",
+  "gameover.title": "খেলা শেষ",
+  "gameover.score": "স্কোর: {score}",
+  "gameover.newHighScore": "নতুন রেকর্ড!",
+  "gameover.restart": "আবার খেলতে ট্যাপ করুন বা স্পেস চাপুন",
+  "settings.title": "সেটিংস",
+  "settings.haptics": "কম্পন",
+  "settings.sound": "শব্দ",
+  "settings.language": "ভাষা",
+  "stats.title": "পরিসংখ্যান",
+  "stats.highScore": "সর্বোচ্চ স্কোর",
+  "stats.highLength": "দীর্ঘতম সাপ",
+  "stats.totalFood": "মোট খাওয়া খাবার",
+  "stats.totalGames": "মোট খেলা",
+  "stats.currentStreak": "বর্তমান ধারা",
+  "stats.bestStreak": "সেরা ধারা"
+}
