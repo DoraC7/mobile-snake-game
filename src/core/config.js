@@ -23,10 +23,18 @@ export const CONFIG = Object.freeze({
   INPUT_QUEUE_MAX: 2,
   /** 觸控滑動最小距離門檻（px） */
   SWIPE_MIN_DISTANCE: 30,
-  /** 品牌色 Jade Cream */
-  COLOR_SNAKE: '#9CBBA0',
-  COLOR_SNAKE_HEAD: '#B7D0BA',
-  COLOR_FOOD: '#E8C468',
+  /** 卡通風格配色：藍色蛇身 + 綠色棋盤 + 紅蘋果 */
+  COLOR_SNAKE: '#4C8DFF',
+  COLOR_SNAKE_HEAD: '#5B9BFF',
+  COLOR_SNAKE_OUTLINE: '#2E5FCC',
+  COLOR_SNAKE_HIGHLIGHT: 'rgba(255,255,255,0.35)',
+  COLOR_FOOD: '#E63946',
+  COLOR_FOOD_HIGHLIGHT: 'rgba(255,255,255,0.55)',
+  COLOR_FOOD_LEAF: '#4CAF50',
+  COLOR_FOOD_STEM: '#6B4226',
+  /** 棋盤格雙色（休閒卡通綠） */
+  COLOR_BOARD_A: '#AAD751',
+  COLOR_BOARD_B: '#A2D149',
   COLOR_BG: '#14181a',
   COLOR_GRID: 'rgba(255,255,255,0.03)',
   COLOR_TEXT: '#eef1ee',
