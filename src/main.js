@@ -10,12 +10,14 @@ import { GameState } from './core/config.js';
 
 async function main() {
   const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game-canvas'));
-  const scoreEl = document.getElementById('score-display');
+  const scoreEl = document.getElementById('score-val');
+  const bestEl = document.getElementById('best-val');
   const overlay = document.getElementById('overlay');
   const overlayTitle = document.getElementById('overlay-title');
   const overlaySubtitle = document.getElementById('overlay-subtitle');
   const overlayHint = document.getElementById('overlay-hint');
   const settingsPanel = document.getElementById('settings-panel');
+  const settingsBackdrop = document.getElementById('settings-backdrop');
   const hapticToggle = /** @type {HTMLInputElement} */ (document.getElementById('haptic-toggle'));
   const soundToggle = /** @type {HTMLInputElement} */ (document.getElementById('sound-toggle'));
   const langSelect = /** @type {HTMLSelectElement} */ (document.getElementById('lang-select'));
@@ -98,7 +100,7 @@ async function main() {
       audio.playDeath();
     },
     onScoreChange: (score) => {
-      scoreEl.textContent = i18n.t('hud.score') + ': ' + score;
+      scoreEl.textContent = score;
     },
     onStateChange: (from, to) => {
       if (to === GameState.PLAYING) {
@@ -110,6 +112,7 @@ async function main() {
           foodEaten: game.foodEatenThisGame,
         });
         if (isNewHighScore) haptic.trigger('new_high_score', Date.now());
+        if (bestEl) bestEl.textContent = stats.getSummary().highScore;
         showGameOverScreen(isNewHighScore);
       }
     },
@@ -139,9 +142,19 @@ async function main() {
 
   overlay.addEventListener('click', tryStart);
 
+  function openSettings() {
+    settingsPanel.hidden = false;
+    settingsBackdrop.hidden = false;
+  }
+  function closeSettings() {
+    settingsPanel.hidden = true;
+    settingsBackdrop.hidden = true;
+  }
+
   settingsBtn.addEventListener('click', () => {
-    settingsPanel.hidden = !settingsPanel.hidden;
+    settingsPanel.hidden ? openSettings() : closeSettings();
   });
+  settingsBackdrop.addEventListener('click', closeSettings);
   hapticToggle.addEventListener('change', () => haptic.setEnabled(hapticToggle.checked));
   soundToggle.addEventListener('change', () => audio.setMuted(!soundToggle.checked));
   langSelect.addEventListener('change', async () => {
@@ -157,6 +170,7 @@ async function main() {
 
   window.addEventListener('resize', () => renderer.resize());
 
+  if (bestEl) bestEl.textContent = stats.getSummary().highScore;
   refreshTexts();
   showTitleScreen();
   game.start();
