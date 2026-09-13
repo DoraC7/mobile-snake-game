@@ -23,6 +23,11 @@ async function main() {
   const langSelect = /** @type {HTMLSelectElement} */ (document.getElementById('lang-select'));
   const settingsBtn = document.getElementById('settings-btn');
   const statsList = document.getElementById('stats-list');
+  const overlayHero = document.getElementById('overlay-hero');
+  const overlayScoreHero = document.getElementById('overlay-score-hero');
+  const overlayHsBadge = document.getElementById('overlay-hs-badge');
+  const dpad = document.getElementById('dpad');
+  const canvasFrame = document.querySelector('.canvas-frame');
 
   const i18n = new I18n();
   await i18n.init();
@@ -63,27 +68,48 @@ async function main() {
     ];
     rows.forEach(([label, value]) => {
       const li = document.createElement('li');
-      li.textContent = `${label}: ${value}`;
+      const labelEl = document.createElement('span');
+      labelEl.className = 'stat-label';
+      labelEl.textContent = label;
+      const valueEl = document.createElement('span');
+      valueEl.className = 'stat-value';
+      valueEl.textContent = value;
+      li.appendChild(labelEl);
+      li.appendChild(valueEl);
       statsList.appendChild(li);
     });
   }
 
   function showTitleScreen() {
     overlay.hidden = false;
+    overlay.classList.remove('overlay--gameover');
+    overlay.dataset.hs = 'false';
+    overlayHero.hidden = true;
     overlayTitle.textContent = i18n.t('title.start');
+    overlaySubtitle.hidden = false;
     overlaySubtitle.textContent = i18n.t('title.highScore', { score: stats.getSummary().highScore });
     overlayHint.hidden = true;
-    refreshStats();
+    // Title 畫面不顯示 stats，保持 overlay 簡潔
+    statsList.innerHTML = '';
+    statsList.hidden = true;
   }
 
   function showGameOverScreen(isNewHighScore) {
     overlay.hidden = false;
+    overlay.classList.add('overlay--gameover');
+    overlay.dataset.hs = isNewHighScore ? 'true' : 'false';
+
+    // Hero score
+    overlayScoreHero.textContent = game.score;
+    overlayHero.hidden = false;
+    overlayHsBadge.hidden = !isNewHighScore;
+
     overlayTitle.textContent = i18n.t('gameover.title');
-    overlaySubtitle.textContent = isNewHighScore
-      ? `${i18n.t('gameover.score', { score: game.score })} · ${i18n.t('gameover.newHighScore')}`
-      : i18n.t('gameover.score', { score: game.score });
+    overlaySubtitle.hidden = true;   // score 已在 hero 區不需重複
+
     overlayHint.hidden = false;
     overlayHint.textContent = i18n.t('gameover.restart');
+    statsList.hidden = false;
     refreshStats();
   }
 
@@ -98,9 +124,18 @@ async function main() {
     onDeath: () => {
       haptic.trigger('death');
       audio.playDeath();
+      // Canvas 死亡震動
+      canvasFrame.classList.add('death-shake');
+      canvasFrame.addEventListener('animationend', () => {
+        canvasFrame.classList.remove('death-shake');
+      }, { once: true });
     },
     onScoreChange: (score) => {
       scoreEl.textContent = score;
+      // 分數跳車動畫（reflow trick 確保重複觸發）
+      scoreEl.classList.remove('bump');
+      void scoreEl.offsetWidth;
+      scoreEl.classList.add('bump');
     },
     onStateChange: (from, to) => {
       if (to === GameState.PLAYING) {

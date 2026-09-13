@@ -31,10 +31,15 @@
       <div class="canvas-frame">
         <canvas id="game-canvas"></canvas>
         <div id="overlay">
+          <!-- Hero Score（只在 Game Over 顯示） -->
+          <div id="overlay-hero" hidden>
+            <div class="overlay-hero-score" id="overlay-score-hero">0</div>
+            <div class="overlay-hs-badge" id="overlay-hs-badge" hidden>🏆 New High Score</div>
+          </div>
           <h1 id="overlay-title"></h1>
           <p id="overlay-subtitle"></p>
           <ul id="stats-list" aria-label="Stats"></ul>
-          <p id="overlay-hint" hidden></p>
+          <button id="overlay-hint" type="button" hidden></button>
         </div>
       </div>
     </main>

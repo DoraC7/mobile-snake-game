@@ -12,6 +12,11 @@
   --text-dim:     rgba(226, 232, 244, 0.45);
   --border:       rgba(0, 229, 255, 0.14);
   --border-hi:    rgba(0, 229, 255, 0.5);
+  /* ── 慶祝色系（新高分） ── */
+  --gold:         #ffd66b;
+  --gold-dim:     rgba(255, 214, 107, 0.12);
+  --gold-glow:    rgba(255, 214, 107, 0.45);
+  --gold-border:  rgba(255, 214, 107, 0.45);
   color-scheme: dark;
 }
 
@@ -171,13 +176,77 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 20px 24px;
-  gap: 6px;
+  padding: 16px 16px 20px;
+  gap: 8px;
   cursor: pointer;
+  overflow: hidden;
 }
 
 #overlay[hidden] { display: none; }
 
+/* ── Hero Score（Game Over 主角） ── */
+#overlay-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: hero-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s both;
+}
+
+#overlay-hero[hidden] { display: none; }
+
+.overlay-hero-score {
+  font-size: clamp(3.2rem, 14vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.overlay-hs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 14px;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-border);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+}
+
+.overlay-hs-badge[hidden] { display: none; }
+
+/* Game Over 狀態：title 降為輔助文字 */
+#overlay.overlay--gameover #overlay-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  text-shadow: none;
+  text-transform: uppercase;
+  order: -1;   /* 讓 title 排在 hero 上方 */
+  animation: fade-in 0.3s ease-out both;
+}
+
+/* 新高分時 title 變金色 */
+#overlay[data-hs="true"] #overlay-title {
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+/* 新高分時 hero score 也亮金 */
+#overlay[data-hs="true"] .overlay-hero-score {
+  color: var(--gold);
+  text-shadow: 0 0 32px var(--gold-glow);
+}
+
+/* 標準 title（Title 畫面） */
 #overlay-title {
   font-size: 2rem;
   font-weight: 900;
@@ -190,38 +259,87 @@ body {
 #overlay-subtitle {
   margin: 0;
   color: var(--text-dim);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
+
+#overlay-subtitle[hidden] { display: none; }
+
+/* ── Stats 2 欄流程（隱藏於 Title 畫面） ── */
+#stats-list[hidden] { display: none; }
 
 #stats-list {
   list-style: none;
-  margin: 6px 0 0;
-  padding: 0;
-  font-size: 0.75rem;
-  color: var(--text-dim);
+  margin: 0;
+  padding: 8px 10px;
   display: grid;
-  gap: 2px;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
 
-#overlay-hint {
-  margin: 10px 0 0;
-  padding: 10px 28px;
-  border: 1.5px solid var(--border-hi);
-  border-radius: 999px;
-  color: var(--accent);
-  font-size: 0.75rem;
+#stats-list li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-value {
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* Game Over 時 stats 入場動畫 */
+#overlay.overlay--gameover #stats-list {
+  animation: slide-up 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.18s both;
+}
+
+/* ── CTA 按鈕（重新設計） ── */
+#overlay-hint {
+  /* reset button */
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--accent);
+  border: none;
+  border-radius: 14px;
+  color: #020c18;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  animation: pulse-ring 2.2s ease-in-out infinite;
+  padding: 13px 0;
+  width: 100%;
+  max-width: 260px;
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3), 0 0 0 0 rgba(0, 229, 255, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  animation: btn-rise 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.28s both;
+}
+
+#overlay-hint:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(0, 229, 255, 0.15);
 }
 
 #overlay-hint[hidden] { display: none; }
-
-@keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 0   rgba(0, 229, 255, 0.45); }
-  50%       { box-shadow: 0 0 0 8px rgba(0, 229, 255, 0);    }
-}
 
 /* ─────────────────────────────────────────────
    D-pad
@@ -283,6 +401,66 @@ body {
   color: var(--accent);
   border-color: rgba(0, 229, 255, 0.5);
   transform: scale(0.91);
+}
+
+/* D-pad 永遠可見，於 title/gameover 支持操作 */
+#dpad {
+  transition: opacity 0.2s ease;
+}
+
+/* ─────────────────────────────────────────────
+   Score Card Bump（吃食物時跳動）
+───────────────────────────────────────────── */
+.score-value.bump {
+  animation: score-bump 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Canvas 死亡震動 */
+.canvas-frame.death-shake {
+  animation: death-shake 0.38s ease-out;
+}
+
+/* ─────────────────────────────────────────────
+   Keyframes
+───────────────────────────────────────────── */
+@keyframes hero-in {
+  from { opacity: 0; transform: scale(0.65) translateY(12px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+@keyframes badge-pop {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes btn-rise {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: inherit; }
+}
+
+@keyframes score-bump {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.35); color: var(--accent); }
+  100% { transform: scale(1); }
+}
+
+@keyframes death-shake {
+  0%, 100% { transform: translateX(0); }
+  18%      { transform: translateX(-7px) rotate(-0.4deg); }
+  36%      { transform: translateX(7px)  rotate(0.4deg); }
+  54%      { transform: translateX(-5px); }
+  72%      { transform: translateX(4px); }
+  88%      { transform: translateX(-2px); }
 }
 
 /* ─────────────────────────────────────────────
