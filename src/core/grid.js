@@ -23,6 +23,11 @@ export class Grid {
     return { x, y };
   }
 
+  /** @param {{x:number,y:number}} pos */
+  contains(pos) {
+    return pos.x >= 0 && pos.x < this.cols && pos.y >= 0 && pos.y < this.rows;
+  }
+
   /**
    * 產生隨機格子座標
    * @returns {{x:number,y:number}}

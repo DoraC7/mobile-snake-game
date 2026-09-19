@@ -1,19 +1,21 @@
 // @ts-check
-import { GameState } from './config.js';
+import { GameState } from './config.js?v=9';
 
 /**
- * 極簡狀態機：TITLE / PLAYING / PAUSED / DYING / GAME_OVER
+ * 遊戲狀態機：包含首次教學、開始倒數、暫停及結束流程。
  */
 export class StateMachine {
   constructor() {
     this.state = GameState.TITLE;
     /** @type {Map<string, Set<string>>} 合法轉換表 */
     this.transitions = new Map([
-      [GameState.TITLE, new Set([GameState.PLAYING])],
-      [GameState.PLAYING, new Set([GameState.PAUSED, GameState.DYING])],
-      [GameState.PAUSED, new Set([GameState.PLAYING])],
-      [GameState.DYING, new Set([GameState.GAME_OVER])],
-      [GameState.GAME_OVER, new Set([GameState.TITLE, GameState.PLAYING])],
+      [GameState.TITLE, new Set([GameState.TUTORIAL, GameState.COUNTDOWN])],
+      [GameState.TUTORIAL, new Set([GameState.COUNTDOWN, GameState.TITLE])],
+      [GameState.COUNTDOWN, new Set([GameState.PLAYING, GameState.PAUSED, GameState.TITLE])],
+      [GameState.PLAYING, new Set([GameState.PAUSED, GameState.DYING, GameState.TITLE])],
+      [GameState.PAUSED, new Set([GameState.COUNTDOWN, GameState.TITLE])],
+      [GameState.DYING, new Set([GameState.GAME_OVER, GameState.TITLE])],
+      [GameState.GAME_OVER, new Set([GameState.COUNTDOWN, GameState.TITLE])],
     ]);
     /** @type {((from:string,to:string)=>void)[]} */
     this._listeners = [];

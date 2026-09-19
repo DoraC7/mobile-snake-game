@@ -1,5 +1,5 @@
 // @ts-check
-import { CONFIG } from '../core/config.js';
+import { CONFIG } from '../core/config.js?v=9';
 
 /**
  * Canvas 2D 繪圖（極簡風格），支援移動插值與吃食物彈跳動畫
@@ -16,19 +16,25 @@ export class Renderer {
     this.cellSize = CONFIG.CELL_SIZE;
     /** 食物彈跳動畫計時器（秒），每次吃到食物時重置 */
     this._foodPulseT = 999;
+    this.palette = {
+      snake: CONFIG.COLOR_SNAKE,
+      head: CONFIG.COLOR_SNAKE_HEAD,
+      outline: CONFIG.COLOR_SNAKE_OUTLINE,
+    };
     this.resize();
   }
 
   resize() {
     const dpr = window.devicePixelRatio || 1;
     const rect = this.canvas.getBoundingClientRect();
-    this.cellSize = Math.floor(
-      Math.min(rect.width / this.grid.cols, rect.height / this.grid.rows)
-    );
-    this.canvas.width = this.grid.cols * this.cellSize * dpr;
-    this.canvas.height = this.grid.rows * this.cellSize * dpr;
-    this.canvas.style.width = `${this.grid.cols * this.cellSize}px`;
-    this.canvas.style.height = `${this.grid.rows * this.cellSize}px`;
+    const size = Math.min(rect.width, rect.height);
+    const backingSize = Math.round(size * dpr);
+    const effectiveSize = backingSize / dpr;
+    this.cellSize = effectiveSize / this.grid.cols;
+    this.canvas.width = backingSize;
+    this.canvas.height = backingSize;
+    this.canvas.style.width = '100%';
+    this.canvas.style.height = '100%';
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
@@ -36,13 +42,22 @@ export class Renderer {
     this._foodPulseT = 0;
   }
 
+  setPalette(theme) {
+    this.palette = {
+      snake: theme.snake || CONFIG.COLOR_SNAKE,
+      head: theme.head || CONFIG.COLOR_SNAKE_HEAD,
+      outline: theme.outline || CONFIG.COLOR_SNAKE_OUTLINE,
+    };
+  }
+
   /**
    * @param {import('../core/snake.js').Snake} snake
    * @param {import('../core/food-manager.js').FoodManager} food
-   * @param {number} alpha 插值係數 0~1
+  * @param {number} alpha 插值係數 0~1
    * @param {number} dt 每幀秒數，用於動畫計時
+  * @param {{x:number,y:number}[]} [obstacles]
    */
-  render(snake, food, alpha, dt) {
+  render(snake, food, alpha, dt, obstacles = []) {
     const { ctx, cellSize } = this;
     const w = this.grid.cols * cellSize;
     const h = this.grid.rows * cellSize;
@@ -50,6 +65,7 @@ export class Renderer {
     ctx.fillStyle = CONFIG.COLOR_BG;
     ctx.fillRect(0, 0, w, h);
     this._drawBoard();
+    this._drawObstacles(obstacles);
 
     this._drawFood(food, dt);
     this._drawSnake(snake, alpha);
@@ -104,6 +120,46 @@ export class Renderer {
     ctx.ellipse(cx + r * 0.35, cy - r * 1.2, r * 0.32, r * 0.16, -0.6, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
+
+    if (food.golden) this._drawGoldenFood(food.golden);
+  }
+
+  /** @param {{x:number,y:number,remaining:number,duration:number}} food */
+  _drawGoldenFood(food) {
+    const { ctx, cellSize } = this;
+    const cx = (food.x + 0.5) * cellSize;
+    const cy = (food.y + 0.5) * cellSize;
+    const r = cellSize * 0.34;
+    const ratio = Math.max(0, food.remaining / food.duration);
+    ctx.save();
+    ctx.shadowColor = '#ffd66b';
+    ctx.shadowBlur = cellSize * 0.6;
+    ctx.fillStyle = '#ffd66b';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+    ctx.lineWidth = Math.max(2, cellSize * 0.1);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 1.25, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * ratio);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /** @param {{x:number,y:number}[]} obstacles */
+  _drawObstacles(obstacles) {
+    const { ctx, cellSize } = this;
+    obstacles.forEach((cell) => {
+      const inset = cellSize * 0.12;
+      ctx.fillStyle = '#5d5578';
+      this._roundRect(ctx, cell.x * cellSize + inset, cell.y * cellSize + inset,
+        cellSize - inset * 2, cellSize - inset * 2, cellSize * 0.18);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
   }
 
   /**
@@ -185,9 +241,9 @@ export class Renderer {
     const bodyWidth = cellSize * 0.72;
 
     // 深色描邊，加強卡通輪廓感
-    this._strokeSnakePath(pts, bodyWidth + cellSize * 0.14, CONFIG.COLOR_SNAKE_OUTLINE);
+    this._strokeSnakePath(pts, bodyWidth + cellSize * 0.14, this.palette.outline);
     // 主體藍色，圓角連續造型（轉彎處自動呈圓弧，不出現直角）
-    this._strokeSnakePath(pts, bodyWidth, CONFIG.COLOR_SNAKE);
+    this._strokeSnakePath(pts, bodyWidth, this.palette.snake);
 
     // 蛇頭：圓潤且略大於身體
     this._drawHead(pts[0], snake.direction, bodyWidth);
@@ -213,13 +269,13 @@ export class Renderer {
     const py = dx;
 
     // 深色外框
-    ctx.fillStyle = CONFIG.COLOR_SNAKE_OUTLINE;
+    ctx.fillStyle = this.palette.outline;
     ctx.beginPath();
     ctx.arc(cx, cy, headRadius + cellSize * 0.05, 0, Math.PI * 2);
     ctx.fill();
 
     // 頭部主體
-    ctx.fillStyle = CONFIG.COLOR_SNAKE_HEAD;
+    ctx.fillStyle = this.palette.head;
     ctx.beginPath();
     ctx.arc(cx, cy, headRadius, 0, Math.PI * 2);
     ctx.fill();

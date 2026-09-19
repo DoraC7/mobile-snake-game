@@ -1,5 +1,5 @@
 // @ts-check
-import { CONFIG } from '../core/config.js';
+import { CONFIG } from '../core/config.js?v=9';
 
 const STORAGE_KEY = CONFIG.STORAGE_PREFIX + 'locale';
 const RTL_LOCALES = new Set(['ar-SA', 'fa-IR', 'ur-PK']);
@@ -17,7 +17,7 @@ export class I18n {
   }
 
   async init() {
-    const idx = await fetch('./i18n/index.json').then((r) => r.json());
+    const idx = await fetch('./i18n/index.json', { cache: 'no-cache' }).then((r) => r.json());
     this.available = idx.locales;
     // 預設一律使用英文（idx.default），不自動偵測瀏覽器語系，
     // 只有使用者在設定面板主動切換過的語系才會被記住並優先套用。
@@ -30,8 +30,11 @@ export class I18n {
   async setLocale(code) {
     const meta = this.available.find((l) => l.code === code);
     const finalCode = meta ? code : 'en-US';
-    const res = await fetch(`./i18n/${finalCode}.json`);
-    this.strings = await res.json();
+    const [fallback, selected] = await Promise.all([
+      fetch('./i18n/en-US.json', { cache: 'no-cache' }).then((r) => r.json()),
+      fetch(`./i18n/${finalCode}.json`, { cache: 'no-cache' }).then((r) => r.json()),
+    ]);
+    this.strings = { ...fallback, ...selected };
     this.locale = finalCode;
     try {
       localStorage.setItem(STORAGE_KEY, finalCode);

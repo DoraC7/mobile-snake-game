@@ -1,5 +1,5 @@
 // @ts-check
-import { CONFIG } from '../core/config.js';
+import { CONFIG } from '../core/config.js?v=9';
 
 const STORAGE_KEY = CONFIG.STORAGE_PREFIX + 'muted';
 

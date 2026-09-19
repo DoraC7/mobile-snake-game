@@ -1,5 +1,5 @@
 // @ts-check
-import { CONFIG, Direction } from '../core/config.js';
+import { CONFIG, Direction } from '../core/config.js?v=9';
 
 const KEY_MAP = {
   ArrowUp: Direction.UP,
@@ -17,11 +17,12 @@ const KEY_MAP = {
  */
 export class InputManager {
   /**
-   * @param {{ onDirection: (dir:any)=>void, onPrimaryAction: ()=>void }} handlers
+   * @param {{ onDirection: (dir:any)=>void, onPrimaryAction: ()=>void, onPauseAction?: ()=>void }} handlers
    */
-  constructor({ onDirection, onPrimaryAction }) {
+  constructor({ onDirection, onPrimaryAction, onPauseAction }) {
     this.onDirection = onDirection;
     this.onPrimaryAction = onPrimaryAction;
+    this.onPauseAction = onPauseAction;
     this._touchStart = null;
     this._bindKeyboard();
   }
@@ -34,6 +35,9 @@ export class InputManager {
         this.onDirection(dir);
       } else if (e.code === 'Space' || e.code === 'Enter') {
         this.onPrimaryAction();
+      } else if (e.code === 'Escape' || e.code === 'KeyP') {
+        e.preventDefault();
+        this.onPauseAction && this.onPauseAction();
       }
     });
   }

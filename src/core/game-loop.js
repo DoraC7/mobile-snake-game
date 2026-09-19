@@ -32,6 +32,11 @@ export class GameLoop {
     if (this._rafId) cancelAnimationFrame(this._rafId);
   }
 
+  resetClock() {
+    this.lastTime = performance.now();
+    this.accumulator = 0;
+  }
+
   /** @param {number} now */
   _tick(now) {
     if (!this.running) return;

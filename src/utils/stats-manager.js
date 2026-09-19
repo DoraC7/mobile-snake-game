@@ -1,5 +1,5 @@
 // @ts-check
-import { CONFIG } from '../core/config.js';
+import { CONFIG } from '../core/config.js?v=9';
 
 const STORAGE_KEY = CONFIG.STORAGE_PREFIX + 'stats';
 
@@ -19,6 +19,10 @@ export class StatsManager {
       totalGamesPlayed: 0,
       currentStreak: 0,
       bestStreak: 0,
+      recentGames: [],
+      bestByMode: {},
+      dailyResults: {},
+      achievements: {},
     };
   }
 
@@ -42,12 +46,15 @@ export class StatsManager {
   }
 
   /**
-   * @param {{score:number, length:number, foodEaten:number}} result
-   * @returns {{isNewHighScore:boolean}}
+  * @param {{score:number, length:number, foodEaten:number, mode?:string, durationSeconds?:number, maxCombo?:number, maxSpeedLevel?:number, goldenFoodEaten?:number, deathReason?:string|null}} result
+  * @returns {{isNewHighScore:boolean, previousScore:number|null, modeBest:number}}
    */
-  recordGameEnd({ score, length, foodEaten }) {
+  recordGameEnd(result) {
+    const { score, length, foodEaten } = result;
     const d = this.data;
     const isNewHighScore = score > d.highScore;
+    const mode = result.mode || 'classic';
+    const previous = d.recentGames.length ? d.recentGames[d.recentGames.length - 1] : null;
 
     if (isNewHighScore) {
       d.highScore = score;
@@ -60,12 +67,27 @@ export class StatsManager {
     d.highLength = Math.max(d.highLength, length);
     d.totalFoodEaten += foodEaten;
     d.totalGamesPlayed += 1;
+    const modeBest = Math.max(Number(d.bestByMode[mode] || 0), score);
+    d.bestByMode[mode] = modeBest;
+    d.recentGames.push({ ...result, endedAt: Date.now() });
+    d.recentGames = d.recentGames.slice(-50);
+    if (result.dailyId) {
+      const previousDaily = d.dailyResults[result.dailyId] || { bestScore: 0, completed: false };
+      d.dailyResults[result.dailyId] = {
+        bestScore: Math.max(previousDaily.bestScore, score),
+        completed: previousDaily.completed || Boolean(result.dailyCompleted),
+      };
+    }
 
     this._save();
-    return { isNewHighScore };
+    return { isNewHighScore, previousScore: previous ? previous.score : null, modeBest };
   }
 
   getSummary() {
     return { ...this.data };
+  }
+
+  getRecentGames(limit = 7) {
+    return this.data.recentGames.slice(-limit);
   }
 }

@@ -2,32 +2,37 @@
 // 重要不變量：新增任何 .js/.json/.css 模組後，務必同步加入下方快取清單，
 // 否則離線模式會壞掉（見 SPEC.md §5）。
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v13';
 const CACHE_NAME = `mobile-snake-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
   './',
   './index.html',
   './manifest.json',
-  './styles/main.css',
+  './styles/main.css?v=13',
   './assets/icon.svg',
   './assets/icon-192.png',
   './assets/icon-512.png',
 
-  './src/main.js',
-  './src/core/config.js',
-  './src/core/grid.js',
-  './src/core/snake.js',
-  './src/core/food-manager.js',
-  './src/core/state-machine.js',
-  './src/core/game-loop.js',
-  './src/core/game.js',
-  './src/render/renderer.js',
-  './src/input/input-manager.js',
-  './src/audio/audio-engine.js',
-  './src/utils/haptic-manager.js',
-  './src/utils/stats-manager.js',
-  './src/i18n/i18n.js',
+  './src/main.js?v=13',
+  './src/core/config.js?v=9',
+  './src/core/game-rules.js?v=9',
+  './src/core/daily-challenge.js?v=9',
+  './src/core/grid.js?v=9',
+  './src/core/snake.js?v=9',
+  './src/core/food-manager.js?v=9',
+  './src/core/state-machine.js?v=9',
+  './src/core/game-loop.js?v=9',
+  './src/core/game.js?v=9',
+  './src/render/renderer.js?v=13',
+  './src/render/share-card-renderer.js?v=9',
+  './src/input/input-manager.js?v=9',
+  './src/audio/audio-engine.js?v=9',
+  './src/utils/haptic-manager.js?v=9',
+  './src/utils/stats-manager.js?v=9',
+  './src/utils/achievement-manager.js?v=9',
+  './src/themes/theme-manager.js?v=9',
+  './src/i18n/i18n.js?v=9',
 
   './i18n/index.json',
   './i18n/zh-TW.json',

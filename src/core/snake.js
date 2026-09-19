@@ -1,6 +1,6 @@
 // @ts-check
-import { CONFIG, Direction, isOpposite } from './config.js';
-import { Grid } from './grid.js';
+import { CONFIG, Direction, isOpposite } from './config.js?v=9';
+import { Grid } from './grid.js?v=9';
 
 /**
  * 蛇身資料結構、移動、碰撞偵測
@@ -27,7 +27,7 @@ export class Snake {
     this.inputQueue = [];
     this.pendingGrowth = 0;
     this.alive = true;
-    /** @type {null | 'wall' | 'self'} 死因（v1 wrap 模式下僅 'self'，保留 wall 供未來擴充） */
+    /** @type {null | 'wall' | 'self' | 'obstacle'} */
     this.deathReason = null;
   }
 
@@ -51,16 +51,28 @@ export class Snake {
 
   /**
    * 前進一格（邏輯 tick）
-   * @returns {boolean} 是否仍存活
+  * @param {{wrapWalls?:boolean, obstacles?:{x:number,y:number}[]}} [rules]
+  * @returns {boolean} 是否仍存活
    */
-  step() {
+  step(rules = {}) {
     if (this.inputQueue.length) {
       this.direction = this.inputQueue.shift();
     }
 
     const head = this.body[0];
     const rawNext = { x: head.x + this.direction.x, y: head.y + this.direction.y };
-    const next = this.grid.wrap(rawNext);
+    if (rules.wrapWalls === false && !this.grid.contains(rawNext)) {
+      this.alive = false;
+      this.deathReason = 'wall';
+      return false;
+    }
+    const next = rules.wrapWalls === false ? rawNext : this.grid.wrap(rawNext);
+
+    if (rules.obstacles && rules.obstacles.some((cell) => Grid.equals(cell, next))) {
+      this.alive = false;
+      this.deathReason = 'obstacle';
+      return false;
+    }
 
     // 撞自己偵測（尾巴會移動，除非本次要成長，所以檢查時排除即將離開的尾格）
     const willGrow = this.pendingGrowth > 0;

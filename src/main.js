@@ -1,12 +1,16 @@
 // @ts-check
-import { Game } from './core/game.js';
-import { Renderer } from './render/renderer.js';
-import { InputManager } from './input/input-manager.js';
-import { HapticManager } from './utils/haptic-manager.js';
-import { StatsManager } from './utils/stats-manager.js';
-import { AudioEngine } from './audio/audio-engine.js';
-import { I18n } from './i18n/i18n.js';
-import { GameState } from './core/config.js';
+import { Game } from './core/game.js?v=9';
+import { Renderer } from './render/renderer.js?v=13';
+import { InputManager } from './input/input-manager.js?v=9';
+import { HapticManager } from './utils/haptic-manager.js?v=9';
+import { StatsManager } from './utils/stats-manager.js?v=9';
+import { AudioEngine } from './audio/audio-engine.js?v=9';
+import { I18n } from './i18n/i18n.js?v=9';
+import { GameState } from './core/config.js?v=9';
+import { createDailyChallenge } from './core/daily-challenge.js?v=9';
+import { AchievementManager, ACHIEVEMENTS } from './utils/achievement-manager.js?v=9';
+import { ThemeManager } from './themes/theme-manager.js?v=9';
+import { shareResult } from './render/share-card-renderer.js?v=9';
 
 async function main() {
   const canvas = /** @type {HTMLCanvasElement} */ (document.getElementById('game-canvas'));
@@ -26,8 +30,29 @@ async function main() {
   const overlayHero = document.getElementById('overlay-hero');
   const overlayScoreHero = document.getElementById('overlay-score-hero');
   const overlayHsBadge = document.getElementById('overlay-hs-badge');
-  const dpad = document.getElementById('dpad');
   const canvasFrame = document.querySelector('.canvas-frame');
+  const pauseBtn = document.getElementById('pause-btn');
+  const restartBtn = document.getElementById('restart-btn');
+  const homeBtn = document.getElementById('home-btn');
+  const countdownEl = document.getElementById('countdown');
+  const tutorialCard = document.getElementById('tutorial-card');
+  const difficultySelect = /** @type {HTMLSelectElement} */ (document.getElementById('difficulty-select'));
+  const modeSelect = /** @type {HTMLSelectElement} */ (document.getElementById('mode-select'));
+  const speedLevelEl = document.getElementById('speed-level');
+  const comboStatusEl = document.getElementById('combo-status');
+  const resultComparisonEl = document.getElementById('result-comparison');
+  const progressPanel = document.getElementById('progress-panel');
+  const dailySummary = document.getElementById('daily-summary');
+  const achievementSummary = document.getElementById('achievement-summary');
+  const trendCanvas = /** @type {HTMLCanvasElement} */ (document.getElementById('trend-canvas'));
+  const shareBtn = document.getElementById('share-btn');
+  const themeSelect = /** @type {HTMLSelectElement} */ (document.getElementById('theme-select'));
+
+  const DIFFICULTY_KEY = 'mobile-snake:difficulty';
+  const MODE_KEY = 'mobile-snake:mode';
+  const TUTORIAL_KEY = 'mobile-snake:tutorial-v1';
+  difficultySelect.value = localStorage.getItem(DIFFICULTY_KEY) || 'normal';
+  modeSelect.value = localStorage.getItem(MODE_KEY) || 'classic';
 
   const i18n = new I18n();
   await i18n.init();
@@ -35,6 +60,9 @@ async function main() {
   const haptic = new HapticManager();
   const audio = new AudioEngine();
   const stats = new StatsManager();
+  const achievements = new AchievementManager();
+  const themes = new ThemeManager();
+  const dailyChallenge = createDailyChallenge();
 
   hapticToggle.checked = haptic.enabled;
   soundToggle.checked = !audio.muted;
@@ -53,6 +81,7 @@ async function main() {
       const key = el.getAttribute('data-i18n');
       if (key) el.textContent = i18n.t(key);
     });
+    speedLevelEl.textContent = i18n.t('hud.level', { level: game.speedLevel || 1 });
   }
 
   function refreshStats() {
@@ -80,6 +109,55 @@ async function main() {
     });
   }
 
+  function drawTrend() {
+    const games = stats.getRecentGames(7);
+    const ctx = trendCanvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = trendCanvas.getBoundingClientRect();
+    const width = Math.max(1, Math.round(rect.width));
+    const height = Math.max(1, Math.round(rect.height));
+    trendCanvas.width = Math.round(width * dpr);
+    trendCanvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+    if (games.length < 2) return;
+    const max = Math.max(1, ...games.map((item) => item.score));
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    ctx.lineWidth = 4;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    games.forEach((item, index) => {
+      const x = 8 + index * ((width - 16) / (games.length - 1));
+      const y = height - 8 - (item.score / max) * (height - 16);
+      if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  function refreshProgress() {
+    const daily = stats.getSummary().dailyResults[dailyChallenge.id];
+    dailySummary.textContent = daily?.completed
+      ? i18n.t('daily.completed')
+      : i18n.t('daily.target', { score: dailyChallenge.targetScore });
+    achievementSummary.textContent = i18n.t('achievement.summary', {
+      count: achievements.getUnlockedCount(), total: ACHIEVEMENTS.length,
+    });
+    drawTrend();
+  }
+
+  function refreshThemes() {
+    const available = themes.available(achievements);
+    themeSelect.innerHTML = '';
+    available.forEach((theme) => {
+      const option = document.createElement('option');
+      option.value = theme.id;
+      option.textContent = i18n.t(`theme.${theme.id}`);
+      themeSelect.appendChild(option);
+    });
+    if (available.some((theme) => theme.id === themes.selected)) themeSelect.value = themes.selected;
+    else themeSelect.value = 'neon';
+  }
+
   function showTitleScreen() {
     overlay.hidden = false;
     overlay.classList.remove('overlay--gameover');
@@ -88,7 +166,19 @@ async function main() {
     overlayTitle.textContent = i18n.t('title.start');
     overlaySubtitle.hidden = false;
     overlaySubtitle.textContent = i18n.t('title.highScore', { score: stats.getSummary().highScore });
-    overlayHint.hidden = true;
+    speedLevelEl.textContent = i18n.t('hud.level', { level: 1 });
+    comboStatusEl.hidden = true;
+    overlayHint.hidden = false;
+    overlayHint.textContent = i18n.t('title.start');
+    restartBtn.hidden = true;
+    homeBtn.hidden = true;
+    shareBtn.hidden = true;
+    countdownEl.hidden = true;
+    resultComparisonEl.hidden = true;
+    tutorialCard.hidden = true;
+    progressPanel.hidden = false;
+    refreshProgress();
+    pauseBtn.hidden = true;
     // Title 畫面不顯示 stats，保持 overlay 簡潔
     statsList.innerHTML = '';
     statsList.hidden = true;
@@ -109,17 +199,102 @@ async function main() {
 
     overlayHint.hidden = false;
     overlayHint.textContent = i18n.t('gameover.restart');
+    restartBtn.hidden = true;
+    homeBtn.hidden = false;
+    homeBtn.textContent = i18n.t('pause.home');
+    countdownEl.hidden = true;
+    tutorialCard.hidden = true;
+    pauseBtn.hidden = true;
     statsList.hidden = false;
     refreshStats();
+    progressPanel.hidden = true;
+    shareBtn.hidden = false;
+    const last = stats.getSummary().recentGames.at(-1);
+    const previous = stats.getSummary().recentGames.at(-2);
+    if (last && previous) {
+      const difference = last.score - previous.score;
+      resultComparisonEl.textContent = difference >= 0
+        ? i18n.t('result.better', { score: difference })
+        : i18n.t('result.lower', { score: Math.abs(difference) });
+      resultComparisonEl.hidden = false;
+    } else {
+      resultComparisonEl.hidden = true;
+    }
   }
 
-  let pendingHighScoreCheck = false;
+  function showPauseScreen() {
+    overlay.hidden = false;
+    overlay.classList.remove('overlay--gameover');
+    overlayHero.hidden = true;
+    overlayTitle.textContent = i18n.t('pause.title');
+    overlaySubtitle.hidden = false;
+    overlaySubtitle.textContent = i18n.t('pause.subtitle');
+    statsList.hidden = true;
+    tutorialCard.hidden = true;
+    progressPanel.hidden = true;
+    shareBtn.hidden = true;
+    countdownEl.hidden = true;
+    resultComparisonEl.hidden = true;
+    overlayHint.hidden = false;
+    overlayHint.textContent = i18n.t('pause.continue');
+    restartBtn.hidden = false;
+    restartBtn.textContent = i18n.t('pause.restart');
+    homeBtn.hidden = false;
+    homeBtn.textContent = i18n.t('pause.home');
+    pauseBtn.hidden = true;
+  }
+
+  function showTutorial() {
+    overlay.hidden = false;
+    overlay.classList.remove('overlay--gameover');
+    overlayHero.hidden = true;
+    overlayTitle.textContent = i18n.t('tutorial.title');
+    overlaySubtitle.hidden = true;
+    statsList.hidden = true;
+    countdownEl.hidden = true;
+    resultComparisonEl.hidden = true;
+    tutorialCard.hidden = false;
+    progressPanel.hidden = true;
+    shareBtn.hidden = true;
+    overlayHint.hidden = false;
+    overlayHint.textContent = i18n.t('tutorial.start');
+    restartBtn.hidden = true;
+    homeBtn.hidden = false;
+    homeBtn.textContent = i18n.t('pause.home');
+  }
+
+  function showCountdown(seconds) {
+    overlay.hidden = false;
+    overlay.classList.remove('overlay--gameover');
+    overlayHero.hidden = true;
+    overlayTitle.textContent = i18n.t('countdown.ready');
+    overlaySubtitle.hidden = true;
+    statsList.hidden = true;
+    tutorialCard.hidden = true;
+    progressPanel.hidden = true;
+    shareBtn.hidden = true;
+    overlayHint.hidden = true;
+    restartBtn.hidden = true;
+    homeBtn.hidden = true;
+    countdownEl.hidden = false;
+    resultComparisonEl.hidden = true;
+    countdownEl.textContent = seconds > 0 ? String(seconds) : i18n.t('countdown.go');
+    pauseBtn.hidden = false;
+  }
+
+  let lastGameOverWasHighScore = false;
 
   const game = new Game({
-    onEat: () => {
+    onEat: (event) => {
       haptic.trigger('eat_food');
       audio.playEat();
       renderer.triggerFoodPulse();
+      if (event.type === 'golden') {
+        canvasFrame.classList.remove('golden-flash');
+        void canvasFrame.offsetWidth;
+        canvasFrame.classList.add('golden-flash');
+        canvasFrame.addEventListener('animationend', () => canvasFrame.classList.remove('golden-flash'), { once: true });
+      }
     },
     onDeath: () => {
       haptic.trigger('death');
@@ -140,44 +315,109 @@ async function main() {
     onStateChange: (from, to) => {
       if (to === GameState.PLAYING) {
         overlay.hidden = true;
+        pauseBtn.hidden = false;
+      } else if (to === GameState.PAUSED) {
+        showPauseScreen();
+      } else if (to === GameState.TITLE) {
+        showTitleScreen();
       } else if (to === GameState.GAME_OVER) {
-        const { isNewHighScore } = stats.recordGameEnd({
-          score: game.score,
-          length: game.snake.length,
-          foodEaten: game.foodEatenThisGame,
-        });
+        const result = game.getResult();
+        const { isNewHighScore } = stats.recordGameEnd(result);
+        achievements.evaluate(result, stats.getSummary());
+        refreshThemes();
         if (isNewHighScore) haptic.trigger('new_high_score', Date.now());
         if (bestEl) bestEl.textContent = stats.getSummary().highScore;
+        lastGameOverWasHighScore = isNewHighScore;
         showGameOverScreen(isNewHighScore);
       }
     },
+    onCountdown: (seconds) => showCountdown(seconds),
+    onSpeedLevelChange: (level) => {
+      speedLevelEl.textContent = i18n.t('hud.level', { level });
+      speedLevelEl.classList.remove('bump');
+      void speedLevelEl.offsetWidth;
+      speedLevelEl.classList.add('bump');
+    },
+    onComboChange: (combo, multiplier) => {
+      comboStatusEl.hidden = combo < 2;
+      comboStatusEl.textContent = combo < 2 ? '' : `×${multiplier} · ${combo}`;
+    },
   });
+
+  function applyRules() {
+    if (modeSelect.value === 'daily') {
+      game.configure({ difficulty: dailyChallenge.difficulty, mode: 'daily', dailyChallenge });
+    } else {
+      game.configure({ difficulty: difficultySelect.value, mode: modeSelect.value });
+    }
+  }
 
   const renderer = new Renderer(canvas, game.grid);
   game.setRenderCallback((alpha) => {
-    renderer.render(game.snake, game.food, alpha, 1 / 60);
+    renderer.render(game.snake, game.food, alpha, 1 / 60, game.obstacles);
   });
 
   function tryStart() {
     audio.init();
-    if (game.stateMachine.is(GameState.TITLE) || game.stateMachine.is(GameState.GAME_OVER)) {
-      if (game.stateMachine.is(GameState.GAME_OVER)) {
-        game.stateMachine.transition(GameState.TITLE);
+    if (game.stateMachine.is(GameState.TITLE)) {
+      if (localStorage.getItem(TUTORIAL_KEY) !== 'seen') {
+        game.stateMachine.transition(GameState.TUTORIAL);
+        showTutorial();
+        return;
       }
+      applyRules();
       game.startNewGame();
+    } else if (game.stateMachine.is(GameState.GAME_OVER)) {
+      applyRules();
+      game.startNewGame();
+    } else if (game.stateMachine.is(GameState.TUTORIAL)) {
+      localStorage.setItem(TUTORIAL_KEY, 'seen');
+      applyRules();
+      game.startNewGame();
+    } else if (game.stateMachine.is(GameState.PAUSED)) {
+      game.resume();
     }
   }
 
   const input = new InputManager({
     onDirection: (dir) => game.queueDirection(dir),
     onPrimaryAction: () => tryStart(),
+    onPauseAction: () => {
+      if (game.stateMachine.is(GameState.PLAYING) || game.stateMachine.is(GameState.COUNTDOWN)) game.pause();
+      else if (game.stateMachine.is(GameState.PAUSED)) game.resume();
+    },
   });
   input.bindSwipe(canvas);
   input.bindDpad(document.querySelectorAll('.dpad-btn'));
 
-  overlay.addEventListener('click', tryStart);
+  overlayHint.addEventListener('click', (event) => {
+    event.stopPropagation();
+    tryStart();
+  });
+  restartBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    applyRules();
+    game.restart();
+  });
+  homeBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    game.returnToTitle();
+  });
+  shareBtn.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    const result = stats.getRecentGames(1)[0];
+    if (!result) return;
+    try {
+      await shareResult(result, i18n.t('share.title'), i18n.t(`mode.${result.mode}`),
+        i18n.t('share.text', { score: result.score }));
+    } catch (error) {
+      if (error?.name !== 'AbortError') console.warn('Share failed', error);
+    }
+  });
+  pauseBtn.addEventListener('click', () => game.pause());
 
   function openSettings() {
+    if (game.stateMachine.is(GameState.PLAYING) || game.stateMachine.is(GameState.COUNTDOWN)) game.pause();
     settingsPanel.hidden = false;
     settingsBackdrop.hidden = false;
   }
@@ -197,15 +437,27 @@ async function main() {
     refreshTexts();
     if (overlay.hidden === false) {
       if (game.stateMachine.is(GameState.TITLE)) showTitleScreen();
+      else if (game.stateMachine.is(GameState.TUTORIAL)) showTutorial();
+      else if (game.stateMachine.is(GameState.PAUSED)) showPauseScreen();
       else if (game.stateMachine.is(GameState.GAME_OVER)) {
-        showGameOverScreen(false);
+        showGameOverScreen(lastGameOverWasHighScore);
       }
     }
+  });
+  difficultySelect.addEventListener('change', () => localStorage.setItem(DIFFICULTY_KEY, difficultySelect.value));
+  modeSelect.addEventListener('change', () => localStorage.setItem(MODE_KEY, modeSelect.value));
+  themeSelect.addEventListener('change', () => themes.apply(themeSelect.value, renderer));
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) game.pause();
   });
 
   window.addEventListener('resize', () => renderer.resize());
 
   if (bestEl) bestEl.textContent = stats.getSummary().highScore;
+  speedLevelEl.textContent = i18n.t('hud.level', { level: 1 });
+  refreshThemes();
+  themes.apply(themeSelect.value, renderer);
   refreshTexts();
   showTitleScreen();
   game.start();

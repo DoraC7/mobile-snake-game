@@ -57,7 +57,11 @@ body {
   max-height: 900px;
   display: flex;
   flex-direction: column;
-  padding: env(safe-area-inset-top, 16px) 16px env(safe-area-inset-bottom, 16px);
+  padding:
+    calc(16px + env(safe-area-inset-top, 0px))
+    calc(16px + env(safe-area-inset-right, 0px))
+    calc(16px + env(safe-area-inset-bottom, 0px))
+    calc(16px + env(safe-area-inset-left, 0px));
   gap: 12px;
 }
 
@@ -75,6 +79,25 @@ body {
   display: flex;
   gap: 8px;
 }
+
+#run-status {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 54px;
+  color: var(--accent);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+#combo-status {
+  color: var(--gold);
+  animation: score-bump 0.3s ease-out;
+}
+
+#combo-status[hidden] { display: none; }
 
 .score-card {
   flex: 1;
@@ -104,7 +127,8 @@ body {
   line-height: 1.2;
 }
 
-#settings-btn {
+#settings-btn,
+.hud-icon-btn {
   background: var(--accent-dim);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -119,10 +143,13 @@ body {
   transition: background 0.15s, border-color 0.15s;
 }
 
-#settings-btn:active {
+#settings-btn:active,
+.hud-icon-btn:active {
   background: rgba(0, 229, 255, 0.2);
   border-color: var(--border-hi);
 }
+
+.hud-icon-btn[hidden] { display: none; }
 
 /* ─────────────────────────────────────────────
    Board & Canvas Frame
@@ -134,10 +161,13 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 0;
+  container-type: size;
 }
 
 .canvas-frame {
   position: relative;
+  width: min(100cqw, 100cqh);
+  height: auto;
   border-radius: 12px;
   padding: 3px;
   background: linear-gradient(
@@ -155,7 +185,7 @@ body {
 
 #game-canvas {
   display: block;
-  border-radius: 10px;
+  border-radius: 9px;
   width: 100%;
   height: 100%;
   touch-action: none;
@@ -166,11 +196,11 @@ body {
 ───────────────────────────────────────────── */
 #overlay {
   position: absolute;
-  inset: 0;
+  inset: 3px;
   background: rgba(6, 9, 20, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-radius: 10px;
+  border-radius: 9px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -264,16 +294,66 @@ body {
 
 #overlay-subtitle[hidden] { display: none; }
 
+#result-comparison {
+  margin: 0;
+  color: var(--gold);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+#result-comparison[hidden] { display: none; }
+
+#progress-panel {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.025);
+  color: var(--text-dim);
+  font-size: 0.68rem;
+}
+
+#progress-panel[hidden] { display: none; }
+#trend-canvas { display: block; width: 100%; height: 42px; margin: 4px 0; }
+#daily-summary { color: var(--gold); font-weight: 700; }
+
+#countdown {
+  font-size: clamp(4rem, 20vw, 7rem);
+  font-weight: 900;
+  color: var(--accent);
+  text-shadow: 0 0 32px var(--accent-glow);
+  animation: countdown-pop 0.9s ease-out infinite;
+}
+
+#countdown[hidden], #tutorial-card[hidden] { display: none; }
+
+#tutorial-card {
+  width: 100%;
+  max-width: 280px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tutorial-gesture {
+  color: var(--accent);
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+}
+
+#tutorial-card p { margin: 10px 0 0; color: var(--text-dim); line-height: 1.5; }
+
 /* ── Stats 2 欄流程（隱藏於 Title 畫面） ── */
 #stats-list[hidden] { display: none; }
 
 #stats-list {
   list-style: none;
   margin: 0;
-  padding: 8px 10px;
+  padding: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px 12px;
+  gap: 8px;
   width: 100%;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
@@ -282,14 +362,19 @@ body {
 
 #stats-list li {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  padding: 7px 9px;
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: 8px;
 }
 
 .stat-label {
-  font-size: 0.6rem;
+  width: 100%;
+  font-size: 0.58rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--text-dim);
@@ -299,8 +384,8 @@ body {
 }
 
 .stat-value {
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.9rem;
+  font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
@@ -309,6 +394,24 @@ body {
 /* Game Over 時 stats 入場動畫 */
 #overlay.overlay--gameover #stats-list {
   animation: slide-up 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.18s both;
+}
+
+/* 避免入場動畫延遲期間的 transform 讓版面量測與裁切產生偏差。 */
+@media (prefers-reduced-motion: reduce) {
+  #overlay.overlay--gameover #stats-list,
+  #overlay-hero,
+  #overlay-hint,
+  .overlay-hs-badge {
+    animation: none;
+  }
+
+  #countdown,
+  .score-value.bump,
+  .canvas-frame.death-shake,
+  .canvas-frame.golden-flash,
+  #settings-panel {
+    animation: none;
+  }
 }
 
 /* ── CTA 按鈕（重新設計） ── */
@@ -340,6 +443,31 @@ body {
 }
 
 #overlay-hint[hidden] { display: none; }
+
+#overlay-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  width: 100%;
+  max-width: 260px;
+}
+
+#overlay-hint { grid-column: 1 / -1; }
+
+.secondary-action {
+  appearance: none;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font: 700 0.78rem/1 system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+.secondary-action[hidden] { display: none; }
 
 /* ─────────────────────────────────────────────
    D-pad
@@ -420,6 +548,10 @@ body {
   animation: death-shake 0.38s ease-out;
 }
 
+.canvas-frame.golden-flash {
+  animation: golden-flash 0.45s ease-out;
+}
+
 /* ─────────────────────────────────────────────
    Keyframes
 ───────────────────────────────────────────── */
@@ -448,6 +580,12 @@ body {
   to   { opacity: inherit; }
 }
 
+@keyframes countdown-pop {
+  0% { opacity: 0; transform: scale(1.25); }
+  25%, 70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.82); }
+}
+
 @keyframes score-bump {
   0%   { transform: scale(1); }
   45%  { transform: scale(1.35); color: var(--accent); }
@@ -461,6 +599,12 @@ body {
   54%      { transform: translateX(-5px); }
   72%      { transform: translateX(4px); }
   88%      { transform: translateX(-2px); }
+}
+
+@keyframes golden-flash {
+  0% { box-shadow: 0 0 0 rgba(255, 214, 107, 0); }
+  40% { box-shadow: 0 0 42px rgba(255, 214, 107, 0.72); }
+  100% { box-shadow: 0 0 28px rgba(0, 229, 255, 0.18); }
 }
 
 /* ─────────────────────────────────────────────
@@ -575,7 +719,10 @@ body {
 }
 
 /* Language select */
-#lang-select {
+#lang-select,
+#mode-select,
+#difficulty-select,
+#theme-select {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -586,9 +733,96 @@ body {
   max-width: 160px;
 }
 
+button:focus-visible,
+select:focus-visible,
+input:focus-visible + .toggle-track {
+  outline: 3px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 3px;
+}
+
 /* ─────────────────────────────────────────────
    Responsive
 ───────────────────────────────────────────── */
+/* 桌機以鍵盤操作為主，不讓 D-pad 壓縮遊戲棋盤。 */
+@media (hover: hover) and (pointer: fine) {
+  #dpad { display: none; }
+}
+
+/* 橫向觸控裝置把方向鍵移到棋盤右側，保留足夠遊戲面積。 */
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  #app {
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  #hud { grid-column: 1 / -1; }
+  #board-wrap { grid-column: 1; grid-row: 2; }
+  #dpad {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+  }
+}
+
+/* 較矮畫面省略重複的 Game Over 標題，確保主要內容與 CTA 完整可見。 */
+@media (max-height: 720px) {
+  #overlay.overlay--gameover #overlay-title { display: none; }
+
+  #overlay {
+    padding: 10px 12px;
+    gap: 5px;
+  }
+
+  .overlay-hero-score { font-size: clamp(2.6rem, 12vh, 4.2rem); }
+  .overlay-hs-badge { padding: 3px 10px; }
+  #stats-list { padding: 6px; gap: 5px; }
+  #stats-list li { padding: 4px 7px; }
+  #overlay-hint { padding: 10px 0; }
+}
+
+@container (max-height: 420px) {
+  #overlay.overlay--gameover {
+    padding: 10px 12px;
+    gap: 5px;
+  }
+
+  #overlay.overlay--gameover #overlay-title { display: none; }
+  #overlay.overlay--gameover #overlay-hero { gap: 3px; }
+  #overlay.overlay--gameover .overlay-hero-score { font-size: 2.4rem; }
+  #overlay.overlay--gameover .overlay-hs-badge { padding: 2px 8px; font-size: 0.58rem; }
+  #overlay.overlay--gameover #result-comparison { font-size: 0.62rem; }
+  #overlay.overlay--gameover #stats-list { padding: 5px; gap: 4px; }
+  #overlay.overlay--gameover #stats-list li { padding: 2px 6px; }
+  #overlay.overlay--gameover .stat-label { font-size: 0.52rem; }
+  #overlay.overlay--gameover .stat-value { font-size: 0.68rem; }
+  #overlay.overlay--gameover #overlay-actions { gap: 5px; }
+  #overlay.overlay--gameover #overlay-hint,
+  #overlay.overlay--gameover .secondary-action { padding: 6px; font-size: 0.68rem; }
+}
+
+/* Container queries 尚未生效的瀏覽器備援。 */
+@media (max-width: 480px) {
+  #overlay.overlay--gameover { padding: 8px 12px; gap: 4px; }
+  #overlay.overlay--gameover #overlay-title { display: none; }
+  #overlay.overlay--gameover #overlay-hero { gap: 2px; }
+  #overlay.overlay--gameover .overlay-hero-score { font-size: 2.35rem; }
+  #overlay.overlay--gameover .overlay-hs-badge { padding: 2px 8px; font-size: 0.56rem; }
+  #overlay.overlay--gameover #stats-list { padding: 4px; gap: 3px; }
+  #overlay.overlay--gameover #stats-list li { padding: 2px 5px; }
+  #overlay.overlay--gameover .stat-label { font-size: 0.5rem; }
+  #overlay.overlay--gameover .stat-value { font-size: 0.66rem; }
+  #overlay.overlay--gameover #overlay-actions { gap: 4px; }
+  #overlay.overlay--gameover #overlay-hint,
+  #overlay.overlay--gameover .secondary-action { padding: 6px; font-size: 0.65rem; }
+}
+
+/* 極矮桌機視窗只保留核心結果，詳細統計仍可在正常高度顯示。 */
+@media (max-height: 520px) and (hover: hover) and (pointer: fine) {
+  #overlay.overlay--gameover #stats-list { display: none; }
+}
+
 @media (min-width: 640px) {
   #app { max-width: 520px; }
 

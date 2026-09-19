@@ -1,5 +1,5 @@
 // @ts-check
-import { CONFIG } from '../core/config.js';
+import { CONFIG } from '../core/config.js?v=9';
 
 /** 事件名稱 → 震動模式與優先權對照表（見 SPEC §3.3） */
 const PATTERNS = {

@@ -23,6 +23,16 @@ export const CONFIG = Object.freeze({
   INPUT_QUEUE_MAX: 2,
   /** 觸控滑動最小距離門檻（px） */
   SWIPE_MIN_DISTANCE: 30,
+  /** 開始與恢復遊戲前的倒數秒數 */
+  COUNTDOWN_SECONDS: 3,
+  /** 首次操作教學版本；調升可讓既有玩家重新看到新版教學 */
+  TUTORIAL_VERSION: 1,
+  /** 連續吃到食物可延續 Combo 的遊戲時間 */
+  COMBO_WINDOW_SECONDS: 3,
+  /** 每吃幾個普通食物生成一次金色食物 */
+  GOLDEN_FOOD_EVERY: 5,
+  /** 金色食物存在秒數 */
+  GOLDEN_FOOD_DURATION: 5,
   /** Neon Arcade 配色：青綠蛇身 + 深色棋盤 + 橘紅蘋果 */
   COLOR_SNAKE: '#00e5ff',
   COLOR_SNAKE_HEAD: '#80f0ff',
@@ -45,6 +55,8 @@ export const CONFIG = Object.freeze({
 /** 遊戲狀態列舉 */
 export const GameState = Object.freeze({
   TITLE: 'TITLE',
+  TUTORIAL: 'TUTORIAL',
+  COUNTDOWN: 'COUNTDOWN',
   PLAYING: 'PLAYING',
   PAUSED: 'PAUSED',
   DYING: 'DYING',
