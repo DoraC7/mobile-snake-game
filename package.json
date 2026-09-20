@@ -35,6 +35,9 @@
     "electron": "^44.4.3",
     "electron-builder": "^26.15.3"
   },
+  "overrides": {
+    "uuid": "^11.1.1"
+  },
   "build": {
     "appId": "io.github.dorac7.mobilesnake",
     "productName": "Snake",
