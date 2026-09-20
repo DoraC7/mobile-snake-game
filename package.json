@@ -1,0 +1,56 @@
+{
+  "name": "mobile-snake-game",
+  "version": "1.0.0",
+  "description": "Offline-capable Snake game for web, Android, iOS, and macOS.",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "build:web": "node scripts/build-web.mjs",
+    "sync:native": "npm run build:web && cap sync",
+    "android:open": "npm run sync:native && cap open android",
+    "android:apk": "npm run sync:native && cd android && ./gradlew assembleDebug",
+    "ios:open": "npm run sync:native && cap open ios",
+    "desktop:dev": "npm run build:web && electron .",
+    "desktop:build": "npm run build:web && electron-builder --mac dir",
+    "check": "find src -name '*.js' -print0 | xargs -0 -n1 node --check && node --check sw.js && node --check desktop/main.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DoraC7/mobile-snake-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/DoraC7/mobile-snake-game/issues"
+  },
+  "homepage": "https://github.com/DoraC7/mobile-snake-game#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "^8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
+    "electron": "^44.4.3",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "io.github.dorac7.mobilesnake",
+    "productName": "Snake",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.games",
+      "target": ["dir"],
+      "identity": "-",
+      "icon": "assets/icon-512.png"
+    }
+  }
+}

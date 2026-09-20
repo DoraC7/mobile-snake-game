@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Snake</string>
+    <string name="title_activity_main">Snake</string>
+    <string name="package_name">io.github.dorac7.mobilesnake</string>
+    <string name="custom_url_scheme">io.github.dorac7.mobilesnake</string>
+</resources>

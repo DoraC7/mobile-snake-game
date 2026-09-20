@@ -4,4 +4,9 @@ node_modules/
 .env.*
 *.log
 dist/
+release/
+android/.gradle/
+android/local.properties
+ios/App/Pods/
+ios/App/App/public/
 .vscode/
