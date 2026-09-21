@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+def hasReleaseSigning = project.hasProperty('RELEASE_STORE_FILE') &&
+    project.hasProperty('RELEASE_STORE_PASSWORD') &&
+    project.hasProperty('RELEASE_KEY_ALIAS') &&
+    project.hasProperty('RELEASE_KEY_PASSWORD')
+
 android {
     namespace = "io.github.dorac7.mobilesnake"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,12 +21,22 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             // Release signing is intentionally supplied outside the repository.
             // Configure signingConfigs.release locally or through CI secrets.
-            if (project.hasProperty('RELEASE_STORE_FILE')) {
+            if (hasReleaseSigning) {
                 signingConfig signingConfigs.release
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

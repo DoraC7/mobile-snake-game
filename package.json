@@ -54,7 +54,7 @@
       "category": "public.app-category.games",
       "target": ["dir"],
       "identity": "-",
-      "icon": "assets/icon-512.png"
+      "icon": "assets/icon.icns"
     }
   }
 }
