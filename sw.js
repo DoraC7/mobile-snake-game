@@ -2,19 +2,19 @@
 // 重要不變量：新增任何 .js/.json/.css 模組後，務必同步加入下方快取清單，
 // 否則離線模式會壞掉（見 SPEC.md §5）。
 
-const CACHE_VERSION = 'v14';
+const CACHE_VERSION = 'v15';
 const CACHE_NAME = `mobile-snake-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
   './',
   './index.html',
   './manifest.json',
-  './styles/main.css?v=13',
+  './styles/main.css?v=15',
   './assets/icon.svg',
   './assets/icon-192.png',
   './assets/icon-512.png',
 
-  './src/main.js?v=13',
+  './src/main.js?v=15',
   './src/core/config.js?v=9',
   './src/core/game-rules.js?v=9',
   './src/core/daily-challenge.js?v=9',

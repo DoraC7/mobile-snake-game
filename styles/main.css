@@ -167,7 +167,7 @@ body {
 .canvas-frame {
   position: relative;
   width: min(100cqw, 100cqh);
-  height: auto;
+  height: min(100cqw, 100cqh);
   border-radius: 12px;
   padding: 3px;
   background: linear-gradient(

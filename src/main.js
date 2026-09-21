@@ -31,6 +31,7 @@ async function main() {
   const overlayScoreHero = document.getElementById('overlay-score-hero');
   const overlayHsBadge = document.getElementById('overlay-hs-badge');
   const canvasFrame = document.querySelector('.canvas-frame');
+  const boardWrap = document.getElementById('board-wrap');
   const pauseBtn = document.getElementById('pause-btn');
   const restartBtn = document.getElementById('restart-btn');
   const homeBtn = document.getElementById('home-btn');
@@ -352,6 +353,15 @@ async function main() {
     }
   }
 
+  function resizeBoard() {
+    const size = Math.floor(Math.min(boardWrap.clientWidth, boardWrap.clientHeight));
+    if (size > 0) {
+      canvasFrame.style.width = `${size}px`;
+      canvasFrame.style.height = `${size}px`;
+    }
+  }
+
+  resizeBoard();
   const renderer = new Renderer(canvas, game.grid);
   game.setRenderCallback((alpha) => {
     renderer.render(game.snake, game.food, alpha, 1 / 60, game.obstacles);
@@ -452,7 +462,10 @@ async function main() {
     if (document.hidden) game.pause();
   });
 
-  window.addEventListener('resize', () => renderer.resize());
+  window.addEventListener('resize', () => {
+    resizeBoard();
+    renderer.resize();
+  });
 
   if (bestEl) bestEl.textContent = stats.getSummary().highScore;
   speedLevelEl.textContent = i18n.t('hud.level', { level: 1 });

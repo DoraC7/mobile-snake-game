@@ -5,8 +5,10 @@ node_modules/
 *.log
 dist/
 release/
+build/
 android/.gradle/
 android/local.properties
 ios/App/Pods/
 ios/App/App/public/
 .vscode/
+ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
