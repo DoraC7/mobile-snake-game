@@ -8,6 +8,7 @@ const CACHE_NAME = `mobile-snake-${CACHE_VERSION}`;
 const PRECACHE_URLS = [
   './',
   './index.html',
+  './privacy.html',
   './manifest.json',
   './styles/main.css?v=15',
   './assets/icon.svg',

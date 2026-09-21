@@ -1,0 +1,31 @@
+name: Validate app release readiness
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+      - run: npm run check
+      - run: npm run build:web
+      - name: Verify release files
+        run: |
+          test -f dist/index.html
+          test -f dist/privacy.html
+          test -f dist/manifest.json
+          test -f dist/sw.js
+          test -f dist/assets/icon-192.png
+          test -f dist/assets/icon-512.png

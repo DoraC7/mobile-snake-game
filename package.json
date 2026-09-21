@@ -8,6 +8,7 @@
     "sync:native": "npm run build:web && cap sync",
     "android:open": "npm run sync:native && cap open android",
     "android:apk": "npm run sync:native && cd android && ./gradlew assembleDebug",
+    "android:aab": "npm run sync:native && cd android && ./gradlew bundleRelease",
     "ios:open": "npm run sync:native && cap open ios",
     "desktop:dev": "npm run build:web && electron .",
     "desktop:build": "npm run build:web && electron-builder --mac dir",
