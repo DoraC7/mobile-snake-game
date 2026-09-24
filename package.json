@@ -29,6 +29,7 @@
   "dependencies": {
     "@capacitor/android": "^8.5.2",
     "@capacitor/core": "^8.5.2",
+    "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.5.2"
   },
   "devDependencies": {
@@ -52,7 +53,9 @@
     ],
     "mac": {
       "category": "public.app-category.games",
-      "target": ["dir"],
+      "target": [
+        "dir"
+      ],
       "identity": "-",
       "icon": "assets/icon.icns"
     }

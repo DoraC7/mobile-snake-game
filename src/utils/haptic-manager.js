@@ -1,5 +1,6 @@
 // @ts-check
 import { CONFIG } from '../core/config.js?v=9';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 /** 事件名稱 → 震動模式與優先權對照表（見 SPEC §3.3） */
 const PATTERNS = {
@@ -13,7 +14,8 @@ const STORAGE_KEY = CONFIG.STORAGE_PREFIX + 'haptics-enabled';
 
 export class HapticManager {
   constructor() {
-    this.supported = typeof navigator !== 'undefined' && 'vibrate' in navigator;
+    this.supported = (typeof navigator !== 'undefined' && 'vibrate' in navigator) ||
+      typeof Haptics?.impact === 'function';
     const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
     this.enabled = saved === null ? true : saved === 'true';
     this._lastTickPriority = -1;
@@ -44,10 +46,30 @@ export class HapticManager {
     this._lastTickId = tickId;
     this._lastTickPriority = def.priority;
 
+    const nativeHaptic = this._triggerNative(eventName);
+    if (nativeHaptic) return;
+
     try {
-      navigator.vibrate(def.pattern);
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        navigator.vibrate(def.pattern);
+      }
     } catch {
       // 部分瀏覽器可能拋錯，靜默忽略避免影響遊戲流程
     }
+  }
+
+  _triggerNative(eventName) {
+    if (typeof Haptics?.impact !== 'function') return false;
+
+    const impactStyle = eventName === 'death' ? ImpactStyle.Heavy :
+      eventName === 'new_high_score' ? ImpactStyle.Medium : ImpactStyle.Light;
+
+    Haptics.impact({ style: impactStyle }).catch(() => {
+      // 原生觸覺不可用時交由 navigator.vibrate 備援
+    });
+    if (eventName === 'death') {
+      Haptics.notification({ type: NotificationType.Error }).catch(() => {});
+    }
+    return true;
   }
 }
