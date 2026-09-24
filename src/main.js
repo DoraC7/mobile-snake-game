@@ -284,6 +284,8 @@ async function main() {
   }
 
   let lastGameOverWasHighScore = false;
+  let gameOverScreenShownAt = 0;
+  const GAME_OVER_PAUSE_MS = 2000;
 
   const game = new Game({
     onEat: (event) => {
@@ -329,6 +331,7 @@ async function main() {
         if (isNewHighScore) haptic.trigger('new_high_score', Date.now());
         if (bestEl) bestEl.textContent = stats.getSummary().highScore;
         lastGameOverWasHighScore = isNewHighScore;
+        gameOverScreenShownAt = performance.now();
         showGameOverScreen(isNewHighScore);
       }
     },
@@ -378,6 +381,7 @@ async function main() {
       applyRules();
       game.startNewGame();
     } else if (game.stateMachine.is(GameState.GAME_OVER)) {
+      if (performance.now() - gameOverScreenShownAt < GAME_OVER_PAUSE_MS) return;
       applyRules();
       game.startNewGame();
     } else if (game.stateMachine.is(GameState.TUTORIAL)) {

@@ -8,8 +8,9 @@
   --accent:       #00e5ff;
   --accent-dim:   rgba(0, 229, 255, 0.1);
   --accent-glow:  rgba(0, 229, 255, 0.28);
-  --text:         #e2e8f4;
-  --text-dim:     rgba(226, 232, 244, 0.45);
+  --text:         #f1f5ff;
+  --text-muted:   #aebbd0;
+  --text-dim:     #8290a8;
   --border:       rgba(0, 229, 255, 0.14);
   --border-hi:    rgba(0, 229, 255, 0.5);
   /* ── 慶祝色系（新高分） ── */
@@ -41,7 +42,10 @@ body {
     radial-gradient(ellipse 80% 40% at 50% 0%,  rgba(0, 229, 255, 0.07) 0%, transparent 70%),
     radial-gradient(ellipse 80% 40% at 50% 100%, rgba(124, 77, 255, 0.07) 0%, transparent 70%);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +66,7 @@ body {
     calc(16px + env(safe-area-inset-right, 0px))
     calc(16px + env(safe-area-inset-bottom, 0px))
     calc(16px + env(safe-area-inset-left, 0px));
-  gap: 12px;
+  gap: 16px;
 }
 
 /* ─────────────────────────────────────────────
@@ -71,7 +75,7 @@ body {
 #hud {
   display: flex;
   align-items: stretch;
-  gap: 10px;
+  gap: 12px;
 }
 
 #score-panel {
@@ -84,11 +88,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 54px;
+  min-width: 64px;
   color: var(--accent);
-  font-size: 0.62rem;
+  font-size: 0.82rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-align: center;
 }
 
@@ -103,8 +107,8 @@ body {
   flex: 1;
   background: var(--accent-dim);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px 12px 6px;
+  border-radius: 16px;
+  padding: 10px 12px 9px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,7 +116,7 @@ body {
 }
 
 .score-label {
-  font-size: 0.58rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -120,7 +124,7 @@ body {
 }
 
 .score-value {
-  font-size: 1.5rem;
+  font-size: clamp(1.65rem, 7vw, 2rem);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
@@ -131,9 +135,9 @@ body {
 .hud-icon-btn {
   background: var(--accent-dim);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 1.25rem;
   cursor: pointer;
   width: 48px;
   flex-shrink: 0;
@@ -206,8 +210,8 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 16px 16px 20px;
-  gap: 8px;
+  padding: clamp(24px, 5vw, 40px) clamp(18px, 5vw, 36px);
+  gap: 12px;
   cursor: pointer;
   overflow: hidden;
 }
@@ -243,7 +247,7 @@ body {
   border: 1px solid var(--gold-border);
   border-radius: 999px;
   color: var(--gold);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -841,4 +845,117 @@ input:focus-visible + .toggle-track {
     from { opacity: 0; transform: translateX(-50%) translateY(12px); }
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
+}
+
+/* ─────────────────────────────────────────────
+   Readability pass – clear type scale and spacing
+───────────────────────────────────────────── */
+:root {
+  --text: #f1f5ff;
+  --text-muted: #aebbd0;
+  --text-dim: #8290a8;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+#app { gap: 16px; }
+#hud { gap: 12px; }
+#run-status { min-width: 64px; font-size: 0.82rem; letter-spacing: 0.05em; }
+
+.score-card {
+  border-radius: 16px;
+  padding: 10px 12px 9px;
+}
+
+.score-label { font-size: 0.72rem; }
+.score-value { font-size: clamp(1.65rem, 7vw, 2rem); }
+
+#settings-btn,
+.hud-icon-btn { border-radius: 16px; font-size: 1.25rem; }
+
+#overlay {
+  padding: clamp(24px, 5vw, 40px) clamp(18px, 5vw, 36px);
+  gap: 12px;
+}
+
+#overlay-title {
+  max-width: 100%;
+  font-size: clamp(1.8rem, 7vw, 2.65rem);
+  line-height: 1.12;
+}
+
+#overlay-subtitle {
+  color: var(--text-muted);
+  font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+  line-height: 1.45;
+}
+
+#result-comparison { font-size: 0.9rem; }
+
+#progress-panel {
+  padding: 14px 16px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+#trend-canvas { height: 48px; margin: 8px 0; }
+#tutorial-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+
+#stats-list { padding: 12px; gap: 10px; }
+#stats-list li { gap: 4px; padding: 9px 10px; }
+.stat-label { font-size: 0.72rem; color: var(--text-muted); }
+.stat-value { font-size: 1.05rem; }
+
+#overlay-hint {
+  padding: 15px 12px;
+  font-size: clamp(0.9rem, 3.8vw, 1.05rem);
+  line-height: 1.25;
+}
+
+.secondary-action {
+  min-height: 46px;
+  padding: 11px 12px;
+  font: 700 0.9rem/1.25 inherit;
+}
+
+#dpad {
+  grid-template-columns: 64px 64px 64px;
+  grid-template-rows: 64px 64px 64px;
+}
+
+.dpad-btn { color: var(--text-muted); font-size: 1.1rem; }
+
+#settings-panel {
+  padding: 18px 22px calc(28px + env(safe-area-inset-bottom, 0px));
+  gap: 16px;
+}
+
+#settings-panel h2 {
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text);
+}
+
+.settings-row { min-height: 42px; font-size: 1rem; }
+
+#lang-select,
+#mode-select,
+#difficulty-select,
+#theme-select {
+  min-height: 42px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 360px) {
+  #overlay-title { font-size: 1.65rem; }
+  #overlay { padding-inline: 14px; }
+  #stats-list { grid-template-columns: 1fr; }
 }
